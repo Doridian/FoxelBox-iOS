@@ -1,0 +1,19 @@
+PODS:
+  - JLToast (1.3.5)
+  - JSONJoy-Swift (2.0.0)
+  - KeychainAccess (2.3.4)
+  - SwiftHTTP (1.0.4)
+
+DEPENDENCIES:
+  - JLToast (~> 1.3)
+  - JSONJoy-Swift (~> 2.0.0)
+  - KeychainAccess
+  - SwiftHTTP (~> 1.0.4)
+
+SPEC CHECKSUMS:
+  JLToast: 08024c173a36e4d747607593d59cc17f3c3b09f1
+  JSONJoy-Swift: 9dc31dfb9e551c3ae7781513a86e369598102653
+  KeychainAccess: 3a21b6944b4f2a22653f091d770cf10374961a94
+  SwiftHTTP: 7e084af3bf628b17589c7b61a9df8750947a9813
+
+COCOAPODS: 0.39.0

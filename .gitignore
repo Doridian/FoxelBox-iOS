@@ -1,0 +1,5 @@
+/demo.txt
+xcdebugger
+*.lock
+!Podfile.lock
+/Pods
