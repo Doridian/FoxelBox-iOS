@@ -99,7 +99,8 @@ struct ChatMessageOut: JSONJoy {
     
     let importance: Int?
     
-    let contents: String
+    let type: String
+    let contents: String?
     
     init(_ decoder: JSONDecoder) throws {
         self.server = decoder["server"].string
@@ -121,7 +122,12 @@ struct ChatMessageOut: JSONJoy {
         
         self.importance = decoder["importance"].integer
         
-        self.contents = try decoder["contents"].getString()
+        self.type = try decoder["type"].getString()
+        self.contents = decoder["contents"].string
+        
+        if self.type == "text" && self.contents == nil {
+            throw JSONError.WrongType
+        }
     }
 }
 

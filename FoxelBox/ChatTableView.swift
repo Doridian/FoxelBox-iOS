@@ -22,7 +22,7 @@ class ChatTableView: UITableView, UITableViewDelegate, UITableViewDataSource, Ch
                 return self.formatted!
             }
             self.formatted = ChatStyler.instance.formatMessage(
-                self.message.contents,
+                self.message.contents!,
                 font: "Helvetica",
                 fontSize: 14
             )
@@ -91,7 +91,15 @@ class ChatTableView: UITableView, UITableViewDelegate, UITableViewDataSource, Ch
     }
     
     func addMessages(messages: [ChatMessageOut]) {
-        var myMessages = [ChatMessageOut](messages)
+        var myMessages = [ChatMessageOut]()
+        
+        for message in messages {
+            guard message.type == "text" else {
+                continue
+            }
+            myMessages.append(message)
+        }
+        
         if myMessages.count > ChatPollService.MAX_MESSAGES {
             myMessages.removeFirst(myMessages.count - ChatPollService.MAX_MESSAGES)
         }
