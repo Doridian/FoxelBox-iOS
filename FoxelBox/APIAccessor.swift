@@ -20,12 +20,17 @@ class APIAccessor {
     
     static let loginUtil = LoginAccessor()
     
-    static var requestsInProgress = 0
+    private static var requestsInProgress = 0
+    private static var progressIndicatorShowing = false
     
     static func incrementRequestsInProgress(val: Int) {
         dispatch_async(dispatch_get_main_queue()) {
             APIAccessor.requestsInProgress += val
-            UIApplication.sharedApplication().networkActivityIndicatorVisible = (APIAccessor.requestsInProgress > 0)
+            let progressIndicatorShouldShow = APIAccessor.requestsInProgress > 0
+            if progressIndicatorShouldShow != APIAccessor.progressIndicatorShowing {
+                UIApplication.sharedApplication().networkActivityIndicatorVisible = progressIndicatorShouldShow
+                APIAccessor.progressIndicatorShowing = progressIndicatorShouldShow
+            }
         }
     }
     
