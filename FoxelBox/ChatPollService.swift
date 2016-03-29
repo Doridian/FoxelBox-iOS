@@ -37,7 +37,6 @@ class ChatPollService: APIAccessor, LoginReceiver {
     func stop() {
         self.shouldRun = false
         self.cancel(true)
-        self.pollScheduled = 0
         
         APIAccessor.loginUtil.removeReceiver(self)
     }

@@ -19,6 +19,7 @@ class LoginAccessor: APIAccessor {
     
     private var username :String?
     private var password :String?
+    private var passwordChanged :Bool = false
     
     let loginDispatchGroup = dispatch_group_create()
     
@@ -28,7 +29,7 @@ class LoginAccessor: APIAccessor {
     let loginReceiversLock = NSLock()
     var loginReceivers: NSHashTable = NSHashTable.weakObjectsHashTable()
     
-    let keychain = Keychain(service: "com.foxelbox.FoxelBox")
+    let keychain = Keychain(server: "https://foxelbox.com", protocolType: .HTTPS)
         .synchronizable(true)
         .accessibility(.WhenUnlocked)
     
@@ -107,7 +108,7 @@ class LoginAccessor: APIAccessor {
         dispatch_async(dispatch_get_global_queue(QOS_CLASS_USER_INITIATED, 0)) {
             self.username = NSUserDefaults.standardUserDefaults().stringForKey("username")
             if self.username != nil {
-                self.password = self.keychain["fbchat"]
+                self.password = self.keychain[self.username!]
             }
             dispatch_group_leave(self.loginDispatchGroup)
         }
@@ -116,8 +117,17 @@ class LoginAccessor: APIAccessor {
     func saveCredentials() {
         dispatch_group_enter(self.loginDispatchGroup)
         dispatch_async(dispatch_get_global_queue(QOS_CLASS_USER_INITIATED, 0)) {
+            let oldUsername = NSUserDefaults.standardUserDefaults().stringForKey("username")
             NSUserDefaults.standardUserDefaults().setObject(self.username, forKey: "username")
-            self.keychain["fbchat"] = self.password
+            
+            if oldUsername != nil && oldUsername != self.username {
+                self.keychain[oldUsername!] = nil
+            }
+            
+            if self.username != nil {
+                self.keychain[self.username!] = self.password
+            }
+            
             dispatch_group_leave(self.loginDispatchGroup)
         }
     }
@@ -152,9 +162,34 @@ class LoginAccessor: APIAccessor {
         }
     }
     
+    private func tryLoginAskOnError(username: String?, password: String?) {
+        self.login(username, password: password) { response in
+            if !response.success {
+                self.askLogin("Error: \(response.message!) (\(response.statusCode))")
+            }
+        }
+    }
+    
     func askLogin(message: String?=nil) {
         self.sessionToken = nil
         
+        self.loginDialogShowing = true
+        self.keychain.getSharedPassword() { (username, password, error) in
+            self.loginDialogShowing = false
+            
+            if error != nil {
+                print("Keychain error: \(error!)")
+            }
+            
+            if username == nil || password == nil || error != nil {
+                self.askLoginOwn(message)
+            } else {
+                self.tryLoginAskOnError(username, password: password)
+            }
+        }
+    }
+    
+    func askLoginOwn(message: String?=nil) {
         var showMessage = message
         if showMessage == nil {
             showMessage = "Please use the same credentials as you do on foxelbox.com"
@@ -170,11 +205,7 @@ class LoginAccessor: APIAccessor {
             let alert = UIAlertController(title: "Please log in", message: showMessage, preferredStyle: .Alert)
             alert.addAction(UIAlertAction(title: "OK", style: .Default) { action in
                 dispatch_async(dispatch_get_global_queue(QOS_CLASS_USER_INITIATED, 0)) {
-                    self.login(alert.textFields![0].text, password: alert.textFields![1].text) { response in
-                        if !response.success {
-                            self.askLogin("Error: \(response.message!) (\(response.statusCode))")
-                        }
-                    }
+                    self.tryLoginAskOnError(alert.textFields![0].text, password: alert.textFields![1].text)
                     self.loginDialogShowing = false
                 }
             })
@@ -214,6 +245,8 @@ class LoginAccessor: APIAccessor {
             self.password = password
         }
         
+        self.passwordChanged = true
+        
         if self.username == nil || self.password == nil {
             logout(clearChat: false)
             callback?(BaseResponse(message: "Empty username/password"))
@@ -221,14 +254,8 @@ class LoginAccessor: APIAccessor {
         }
         
         self.sessionToken = nil
-        self.saveCredentials()
         
-        self.doLogin() { response in
-            if response.success {
-                self.loginStateChanged()
-            }
-            callback?(response)
-        }
+        self.doLogin(callback: callback)
         
         return
     }
@@ -251,17 +278,17 @@ class LoginAccessor: APIAccessor {
     }
     
     func doLogin(ignoreLoggedIn: Bool=false, succeedOnNoCredentials: Bool=false, callback: ((BaseResponse) -> (Void))?=nil) {
+        guard ignoreLoggedIn || !self.isLoggedIn() else {
+            callback?(BaseResponse(message: "OK", statusCode: 200, success: true))
+            return
+        }
+        
         guard self.hasCredentials() else {
             if succeedOnNoCredentials {
                 callback?(BaseResponse(message: "OK", statusCode: 200, success: true))
             } else {
                 callback?(BaseResponse(message: "No credentials present"))
             }
-            return
-        }
-        
-        guard ignoreLoggedIn || !self.isLoggedIn() else {
-            callback?(BaseResponse(message: "OK", statusCode: 200, success: true))
             return
         }
 
@@ -273,7 +300,13 @@ class LoginAccessor: APIAccessor {
         request("/login", method: "POST", parameters: [
             "username": self.username!,
             "password": self.password!
-            ], noSession: true, waitOnLogin: false, callback: callback)
+        ], noSession: true, waitOnLogin: false) { response in
+            if response.success {
+                self.loginStateChanged()
+                self.saveCredentials()
+            }
+            callback?(response)
+        }
     }
     
     private func refreshLogin() {
