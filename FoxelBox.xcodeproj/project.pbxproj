@@ -49,6 +49,7 @@
 		CA2B24361CA587C400D2C8AD /* APIAccessor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = APIAccessor.swift; sourceTree = "<group>"; };
 		CA2B24391CA58A6C00D2C8AD /* APIJSON.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = APIJSON.swift; sourceTree = "<group>"; };
 		CA2B243B1CA59C4A00D2C8AD /* LoginAccessor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginAccessor.swift; sourceTree = "<group>"; };
+		CA2C638A1CAB027C007A3450 /* FoxelBox.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = FoxelBox.entitlements; sourceTree = "<group>"; };
 		CA8451D51CA4C8F3001DE3B7 /* WebKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WebKit.framework; path = System/Library/Frameworks/WebKit.framework; sourceTree = SDKROOT; };
 		CAC502091CA8C81B008BB1B0 /* demo.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = demo.txt; sourceTree = "<group>"; };
 		CAD260361CA85C63009EEED8 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -100,6 +101,7 @@
 		CA05C3011CA4C01E00D4EDD2 /* FoxelBox */ = {
 			isa = PBXGroup;
 			children = (
+				CA2C638A1CAB027C007A3450 /* FoxelBox.entitlements */,
 				CA2B24331CA5834E00D2C8AD /* ChatService */,
 				CA05C3021CA4C01E00D4EDD2 /* AppDelegate.swift */,
 				CA05C3041CA4C01E00D4EDD2 /* ChatViewController.swift */,
@@ -175,6 +177,11 @@
 					CA05C2FE1CA4C01E00D4EDD2 = {
 						CreatedOnToolsVersion = 7.3;
 						DevelopmentTeam = 9SQJYMRUP9;
+						SystemCapabilities = {
+							com.apple.SafariKeychain = {
+								enabled = 1;
+							};
+						};
 					};
 				};
 			};
@@ -392,13 +399,14 @@
 			baseConfigurationReference = 938981B81E8F34FAC70BFDCB /* Pods-FoxelBox.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = FoxelBox/FoxelBox.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				INFOPLIST_FILE = FoxelBox/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "com.foxelbox.FoxelBox-iOS";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "";
+				PROVISIONING_PROFILE = "c4c504e2-a318-4cd2-9841-a06618127f81";
 			};
 			name = Debug;
 		};
@@ -407,13 +415,14 @@
 			baseConfigurationReference = 672F562BF4BD45A707385E10 /* Pods-FoxelBox.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CODE_SIGN_ENTITLEMENTS = FoxelBox/FoxelBox.entitlements;
+				CODE_SIGN_IDENTITY = "iPhone Distribution";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
 				INFOPLIST_FILE = FoxelBox/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "com.foxelbox.FoxelBox-iOS";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "";
+				PROVISIONING_PROFILE = "c4c504e2-a318-4cd2-9841-a06618127f81";
 			};
 			name = Release;
 		};
