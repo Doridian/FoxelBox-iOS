@@ -50,13 +50,14 @@ class ChatStyler {
         NSCharacterEncodingDocumentAttribute: NSUTF8StringEncoding,
         DTDefaultFontName: "Helvetica",
         DTDefaultFontSize: 14,
+        DTDefaultTextColor: "white",
         DTDefaultLinkDecoration: false,
         DTDefaultLinkColor: "white",
         DTUseiOS6Attributes: true
     ]
     
     func formatMessage(msg: String) -> NSAttributedString {
-        let data: NSData = fixTags(msg).dataUsingEncoding(NSUTF8StringEncoding)!
+        let data: NSData = ("<span>" + fixTags(msg) + "</span>").dataUsingEncoding(NSUTF8StringEncoding)!
         return DTHTMLAttributedStringBuilder(HTML: data, options: nsHTMLParseOptions, documentAttributes: nil).generatedAttributedString()
     }
     

@@ -7,7 +7,6 @@
 //
 
 import UIKit
-import DTCoreText
 
 class ChatTableView: UITableView, UITableViewDelegate, UITableViewDataSource, ChatReceiver {
     private static let MAX_MESSAGES = 100
@@ -61,10 +60,9 @@ class ChatTableView: UITableView, UITableViewDelegate, UITableViewDataSource, Ch
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCellWithIdentifier("MessageCell")! as UITableViewCell
         
-        let textLabel = cell.subviews[0].subviews[0] as! DTAttributedLabel
-        textLabel.edgeInsets = UIEdgeInsetsZero
-        textLabel.lineBreakMode = NSLineBreakMode.ByWordWrapping
-        textLabel.attributedString = self.messageForIndexPath(indexPath).format()
+        let textLabel = cell.subviews[0].subviews[0] as! UITextView
+        textLabel.textContainerInset = UIEdgeInsetsZero
+        textLabel.attributedText = self.messageForIndexPath(indexPath).format()
         
         cell.transform = CGAffineTransformMakeScale(1, -1)
         
@@ -73,7 +71,7 @@ class ChatTableView: UITableView, UITableViewDelegate, UITableViewDataSource, Ch
     
     func tableView(tableView: UITableView, estimatedHeightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
         let text = self.messageForIndexPath(indexPath).format()
-        let rect = text.boundingRectWithSize(CGSize(width: self.bounds.width, height: 0), options: NSStringDrawingOptions.UsesLineFragmentOrigin, context: nil)
+        let rect = text.boundingRectWithSize(CGSize(width: tableView.bounds.width, height: 0), options:NSStringDrawingOptions.UsesLineFragmentOrigin, context: nil)
         
         return rect.height
     }

@@ -29,18 +29,20 @@
                                             <rect key="frame" x="0.0" y="0.0" width="592" height="44"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="F6s-Kq-YAW" customClass="DTAttributedLabel">
+                                                <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" scrollEnabled="NO" editable="NO" text="Chat message here" selectable="NO" translatesAutoresizingMaskIntoConstraints="NO" id="aRO-8I-6eg">
                                                     <rect key="frame" x="0.0" y="0.0" width="592" height="44"/>
                                                     <color key="backgroundColor" red="0.12941176469999999" green="0.12941176469999999" blue="0.12941176469999999" alpha="1" colorSpace="calibratedRGB"/>
-                                                    <color key="tintColor" red="0.50196078430000002" green="0.0" blue="0.50196078430000002" alpha="1" colorSpace="calibratedRGB"/>
-                                                </view>
+                                                    <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                                    <fontDescription key="fontDescription" name="Helvetica" family="Helvetica" pointSize="17"/>
+                                                    <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
+                                                </textView>
                                             </subviews>
                                             <color key="backgroundColor" red="0.12941176470588234" green="0.12941176470588234" blue="0.12941176470588234" alpha="1" colorSpace="calibratedRGB"/>
                                             <constraints>
-                                                <constraint firstItem="F6s-Kq-YAW" firstAttribute="top" secondItem="cqN-aC-aoP" secondAttribute="top" id="0ca-d6-Isf"/>
-                                                <constraint firstAttribute="bottom" secondItem="F6s-Kq-YAW" secondAttribute="bottom" id="7Bp-MU-d31"/>
-                                                <constraint firstAttribute="trailing" secondItem="F6s-Kq-YAW" secondAttribute="trailing" id="7dC-Ve-hHF"/>
-                                                <constraint firstItem="F6s-Kq-YAW" firstAttribute="leading" secondItem="cqN-aC-aoP" secondAttribute="leading" id="tg4-wa-WoJ"/>
+                                                <constraint firstAttribute="trailing" secondItem="aRO-8I-6eg" secondAttribute="trailing" id="FIM-DE-hca"/>
+                                                <constraint firstAttribute="bottom" secondItem="aRO-8I-6eg" secondAttribute="bottom" id="JaD-ak-VVt"/>
+                                                <constraint firstItem="aRO-8I-6eg" firstAttribute="top" secondItem="cqN-aC-aoP" secondAttribute="top" id="M0N-7t-hYP"/>
+                                                <constraint firstItem="aRO-8I-6eg" firstAttribute="leading" secondItem="cqN-aC-aoP" secondAttribute="leading" id="sbY-bW-eSD"/>
                                             </constraints>
                                         </tableViewCellContentView>
                                         <color key="backgroundColor" red="0.12941176469999999" green="0.12941176469999999" blue="0.12941176469999999" alpha="1" colorSpace="calibratedRGB"/>
@@ -73,7 +75,7 @@
                                             <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                         </state>
                                         <connections>
-                                            <action selector="sendChatMessage:" destination="9pv-A4-QxB" eventType="touchUpInside" id="8gR-8F-lxu"/>
+                                            <action selector="sendChatMessage:" destination="9pv-A4-QxB" eventType="touchUpInside" id="w0T-MG-Vcz"/>
                                             <action selector="triggerLoginCheck" destination="9pv-A4-QxB" eventType="touchDown" id="y6k-qa-we4"/>
                                         </connections>
                                     </button>
@@ -312,14 +314,14 @@
                                         </tableViewCellContentView>
                                         <color key="backgroundColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
                                     </tableViewCell>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="blue" accessoryType="disclosureIndicator" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" id="bk7-7v-kAF">
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="blue" accessoryType="disclosureIndicator" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" id="bgO-tR-Mo6">
                                         <rect key="frame" x="0.0" y="319.5" width="600" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
-                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="bk7-7v-kAF" id="9Zk-ya-m5d">
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="bgO-tR-Mo6" id="xc6-77-VlD">
                                             <rect key="frame" x="0.0" y="0.0" width="567" height="43.5"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Legal" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="6Ec-J3-UaR">
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Legal" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="N76-kA-lTh">
                                                     <rect key="frame" x="8" y="11.5" width="551" height="20"/>
                                                     <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="17"/>
                                                     <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
@@ -327,9 +329,9 @@
                                                 </label>
                                             </subviews>
                                             <constraints>
-                                                <constraint firstAttribute="trailingMargin" secondItem="6Ec-J3-UaR" secondAttribute="trailing" id="GxQ-LB-Jyq"/>
-                                                <constraint firstItem="6Ec-J3-UaR" firstAttribute="centerY" secondItem="9Zk-ya-m5d" secondAttribute="centerY" id="J8z-4k-z86"/>
-                                                <constraint firstItem="6Ec-J3-UaR" firstAttribute="leading" secondItem="9Zk-ya-m5d" secondAttribute="leadingMargin" id="ray-AJ-FRt"/>
+                                                <constraint firstAttribute="trailingMargin" secondItem="N76-kA-lTh" secondAttribute="trailing" id="9Pf-Ip-wtY"/>
+                                                <constraint firstItem="N76-kA-lTh" firstAttribute="leading" secondItem="xc6-77-VlD" secondAttribute="leadingMargin" id="bb7-BD-Mxk"/>
+                                                <constraint firstItem="N76-kA-lTh" firstAttribute="centerY" secondItem="xc6-77-VlD" secondAttribute="centerY" id="fcF-6H-NS2"/>
                                             </constraints>
                                         </tableViewCellContentView>
                                         <color key="backgroundColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
@@ -346,7 +348,7 @@
                     <navigationItem key="navigationItem" title="Settings" id="JU4-Cm-06h"/>
                     <simulatedStatusBarMetrics key="simulatedStatusBarMetrics" statusBarStyle="lightContent"/>
                     <connections>
-                        <outlet property="legalTableViewCell" destination="bk7-7v-kAF" id="gIW-Ki-KS1"/>
+                        <outlet property="legalTableViewCell" destination="bgO-tR-Mo6" id="8cF-Wc-BvB"/>
                         <outlet property="logoutLabel" destination="oaN-7c-NBQ" id="nh8-BQ-Ui0"/>
                         <outlet property="logoutTableCell" destination="ZfD-nn-xJ0" id="wVt-xG-2gl"/>
                         <outlet property="usernameCell" destination="ucE-hb-bAu" id="mRr-bM-B52"/>
@@ -373,17 +375,17 @@
                     </navigationBar>
                     <nil name="viewControllers"/>
                     <connections>
-                        <segue destination="bFe-HR-Hn9" kind="relationship" relationship="rootViewController" id="3WD-q1-zJc"/>
+                        <segue destination="bFe-HR-Hn9" kind="relationship" relationship="rootViewController" id="v1y-uV-wKf"/>
                     </connections>
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="7zY-Jq-PY2" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="-270" y="495"/>
         </scene>
-        <!--Map Navigation-->
+        <!--Map-->
         <scene sceneID="vyp-Tq-tgr">
             <objects>
-                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="xqH-V9-CYy" userLabel="Map Navigation" sceneMemberID="viewController">
+                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="xqH-V9-CYy" sceneMemberID="viewController">
                     <tabBarItem key="tabBarItem" title="Map" image="Map" selectedImage="Map Selected" id="cPa-gy-q4n"/>
                     <toolbarItems/>
                     <simulatedStatusBarMetrics key="simulatedStatusBarMetrics" statusBarStyle="lightContent"/>
@@ -400,10 +402,10 @@
             </objects>
             <point key="canvasLocation" x="1394" y="472"/>
         </scene>
-        <!--Chat Navigation-->
+        <!--Chat-->
         <scene sceneID="JRw-gu-94p">
             <objects>
-                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="alA-4r-ZVA" userLabel="Chat Navigation" sceneMemberID="viewController">
+                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="alA-4r-ZVA" sceneMemberID="viewController">
                     <tabBarItem key="tabBarItem" title="Chat" image="Chat" selectedImage="Chat Selected" id="acW-dT-cKf"/>
                     <toolbarItems/>
                     <simulatedStatusBarMetrics key="simulatedStatusBarMetrics" statusBarStyle="lightContent"/>
@@ -421,25 +423,25 @@
             <point key="canvasLocation" x="918" y="-984"/>
         </scene>
         <!--Legal-->
-        <scene sceneID="JR7-jl-nyq">
+        <scene sceneID="00o-7Y-0k9">
             <objects>
-                <viewController storyboardIdentifier="LegalScene" automaticallyAdjustsScrollViewInsets="NO" useStoryboardIdentifierAsRestorationIdentifier="YES" id="Ogc-uL-yMa" userLabel="Legal" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="LegalScene" automaticallyAdjustsScrollViewInsets="NO" useStoryboardIdentifierAsRestorationIdentifier="YES" id="oGq-hg-kAa" userLabel="Legal" sceneMemberID="viewController">
                     <layoutGuides>
-                        <viewControllerLayoutGuide type="top" id="aOI-j0-Dje"/>
-                        <viewControllerLayoutGuide type="bottom" id="vTx-bI-vbs"/>
+                        <viewControllerLayoutGuide type="top" id="glF-Tu-S0x"/>
+                        <viewControllerLayoutGuide type="bottom" id="Q4k-eZ-AqR"/>
                     </layoutGuides>
-                    <view key="view" contentMode="scaleToFill" id="4s2-jz-stf">
+                    <view key="view" contentMode="scaleToFill" id="x8v-Gp-cNx">
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" showsHorizontalScrollIndicator="NO" indicatorStyle="white" editable="NO" usesAttributedText="YES" translatesAutoresizingMaskIntoConstraints="NO" id="s1f-K1-AuO">
+                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" showsHorizontalScrollIndicator="NO" indicatorStyle="white" editable="NO" usesAttributedText="YES" translatesAutoresizingMaskIntoConstraints="NO" id="IWg-fL-NCZ">
                                 <rect key="frame" x="20" y="20" width="560" height="580"/>
                                 <color key="backgroundColor" red="0.12941176469999999" green="0.12941176469999999" blue="0.12941176469999999" alpha="1" colorSpace="calibratedRGB"/>
                                 <color key="tintColor" red="0.50196078430000002" green="0.0" blue="0.50196078430000002" alpha="1" colorSpace="calibratedRGB"/>
                                 <attributedString key="attributedText">
                                     <fragment content="This app uses the following projects">
                                         <attributes>
-                                            <color key="NSBackgroundColor" red="0.12941176470588237" green="0.12941176470588237" blue="0.12941176470588237" alpha="1" colorSpace="calibratedRGB"/>
+                                            <color key="NSBackgroundColor" red="0.12941176469999999" green="0.12941176469999999" blue="0.12941176469999999" alpha="1" colorSpace="calibratedRGB"/>
                                             <color key="NSColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                             <font key="NSFont" size="14" name="CourierNewPS-BoldMT"/>
                                             <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="wordWrapping" baseWritingDirection="natural" tighteningFactorForTruncation="0.0" allowsDefaultTighteningForTruncation="NO">
@@ -486,7 +488,7 @@
                                     </fragment>
                                     <fragment content="  ">
                                         <attributes>
-                                            <color key="NSBackgroundColor" red="0.12941176470588237" green="0.12941176470588237" blue="0.12941176470588237" alpha="1" colorSpace="calibratedRGB"/>
+                                            <color key="NSBackgroundColor" red="0.12941176469999999" green="0.12941176469999999" blue="0.12941176469999999" alpha="1" colorSpace="calibratedRGB"/>
                                             <color key="NSColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                             <font key="NSFont" size="11" name="CourierNewPS-BoldMT"/>
                                             <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="wordWrapping" baseWritingDirection="natural" tighteningFactorForTruncation="0.0" allowsDefaultTighteningForTruncation="NO">
@@ -533,7 +535,7 @@
                                     </fragment>
                                     <fragment content="Licenses mentioned where appropriate">
                                         <attributes>
-                                            <color key="NSBackgroundColor" red="0.12941176470588237" green="0.12941176470588237" blue="0.12941176470588237" alpha="1" colorSpace="calibratedRGB"/>
+                                            <color key="NSBackgroundColor" red="0.12941176469999999" green="0.12941176469999999" blue="0.12941176469999999" alpha="1" colorSpace="calibratedRGB"/>
                                             <color key="NSColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                             <font key="NSFont" size="11" name="CourierNewPS-ItalicMT"/>
                                             <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="wordWrapping" baseWritingDirection="natural" tighteningFactorForTruncation="0.0" allowsDefaultTighteningForTruncation="NO">
@@ -580,7 +582,7 @@
                                     </fragment>
                                     <fragment content="  JSONJoy-Swift by Dalton Cherry">
                                         <attributes>
-                                            <color key="NSBackgroundColor" red="0.12941176470588237" green="0.12941176470588237" blue="0.12941176470588237" alpha="1" colorSpace="calibratedRGB"/>
+                                            <color key="NSBackgroundColor" red="0.12941176469999999" green="0.12941176469999999" blue="0.12941176469999999" alpha="1" colorSpace="calibratedRGB"/>
                                             <color key="NSColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                             <font key="NSFont" size="11" name="CourierNewPS-BoldMT"/>
                                             <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="wordWrapping" baseWritingDirection="natural" tighteningFactorForTruncation="0.0" allowsDefaultTighteningForTruncation="NO">
@@ -763,15 +765,15 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.</string>
                         </subviews>
                         <color key="backgroundColor" red="0.12941176469999999" green="0.12941176469999999" blue="0.12941176469999999" alpha="1" colorSpace="calibratedRGB"/>
                         <constraints>
-                            <constraint firstItem="s1f-K1-AuO" firstAttribute="leading" secondItem="4s2-jz-stf" secondAttribute="leadingMargin" id="Eh4-dE-psd"/>
-                            <constraint firstAttribute="trailingMargin" secondItem="s1f-K1-AuO" secondAttribute="trailing" id="hCP-vq-BbG"/>
-                            <constraint firstItem="vTx-bI-vbs" firstAttribute="top" secondItem="s1f-K1-AuO" secondAttribute="bottom" id="uVO-JA-2p7"/>
-                            <constraint firstItem="s1f-K1-AuO" firstAttribute="top" secondItem="aOI-j0-Dje" secondAttribute="bottom" id="wqk-hE-nkZ"/>
+                            <constraint firstItem="IWg-fL-NCZ" firstAttribute="leading" secondItem="x8v-Gp-cNx" secondAttribute="leadingMargin" id="8zY-6q-tOg"/>
+                            <constraint firstAttribute="trailingMargin" secondItem="IWg-fL-NCZ" secondAttribute="trailing" id="ObD-Ne-DeC"/>
+                            <constraint firstItem="Q4k-eZ-AqR" firstAttribute="top" secondItem="IWg-fL-NCZ" secondAttribute="bottom" id="lwh-is-tq4"/>
+                            <constraint firstItem="IWg-fL-NCZ" firstAttribute="top" secondItem="glF-Tu-S0x" secondAttribute="bottom" id="y8H-LS-ya7"/>
                         </constraints>
                     </view>
-                    <navigationItem key="navigationItem" id="jRr-fE-coc"/>
+                    <navigationItem key="navigationItem" id="Htn-Hh-xFR"/>
                 </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="WxH-Ua-dlZ" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="DIp-wY-QVY" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="-270" y="1236"/>
         </scene>
