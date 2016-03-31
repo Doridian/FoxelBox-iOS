@@ -8,5 +8,6 @@ target 'FoxelBox' do
     pod 'SwiftHTTP', '~> 1.0.4'
     pod 'KeychainAccess'
     pod 'JLToast', '~> 1.3'
+    pod 'DTCoreText'
 end
 

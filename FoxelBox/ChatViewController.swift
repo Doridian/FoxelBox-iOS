@@ -62,7 +62,12 @@ class ChatViewController: UIViewController, UITextFieldDelegate, ChatErrorReceiv
         }
     }
     
-    @IBAction func sendChatMessage() {
+    func textFieldShouldReturn(textField: UITextField) -> Bool {
+        self.sendChatMessage(textField)
+        return true
+    }
+    
+    @IBAction func sendChatMessage(sender: AnyObject) {
         guard self.canSendChat else {
             return
         }

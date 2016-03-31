@@ -16,6 +16,7 @@ class SettingsViewController: UITableViewController, LoginReceiver {
     @IBOutlet weak var usernameCell: UITableViewCell!
     @IBOutlet weak var websiteTableCell: UITableViewCell!
     @IBOutlet weak var logoutTableCell: UITableViewCell!
+    @IBOutlet weak var legalTableViewCell: UITableViewCell!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -55,6 +56,10 @@ class SettingsViewController: UITableViewController, LoginReceiver {
                     APIAccessor.loginUtil.askLogin()
                 }
             }
+        } else if cell == legalTableViewCell {
+            let storyboard = self.storyboard!
+            let viewController = storyboard.instantiateViewControllerWithIdentifier("LegalScene")
+            self.navigationController!.pushViewController(viewController, animated: true)
         }
     }
     

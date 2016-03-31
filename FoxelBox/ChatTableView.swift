@@ -7,8 +7,11 @@
 //
 
 import UIKit
+import DTCoreText
 
 class ChatTableView: UITableView, UITableViewDelegate, UITableViewDataSource, ChatReceiver {
+    private static let MAX_MESSAGES = 100
+    
     private class CachingMessage {
         let message :ChatMessageOut
         var formatted :NSAttributedString?
@@ -22,9 +25,7 @@ class ChatTableView: UITableView, UITableViewDelegate, UITableViewDataSource, Ch
                 return self.formatted!
             }
             self.formatted = ChatStyler.instance.formatMessage(
-                self.message.contents!,
-                font: "Helvetica",
-                fontSize: 14
+                self.message.contents!
             )
             return self.formatted!
         }
@@ -60,9 +61,10 @@ class ChatTableView: UITableView, UITableViewDelegate, UITableViewDataSource, Ch
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCellWithIdentifier("MessageCell")! as UITableViewCell
         
-        let textLabel = cell.subviews[0].subviews[0] as! UITextView
-        textLabel.textContainerInset = UIEdgeInsetsZero
-        textLabel.attributedText = self.messageForIndexPath(indexPath).format()
+        let textLabel = cell.subviews[0].subviews[0] as! DTAttributedLabel
+        textLabel.edgeInsets = UIEdgeInsetsZero
+        textLabel.lineBreakMode = NSLineBreakMode.ByWordWrapping
+        textLabel.attributedString = self.messageForIndexPath(indexPath).format()
         
         cell.transform = CGAffineTransformMakeScale(1, -1)
         
@@ -100,8 +102,8 @@ class ChatTableView: UITableView, UITableViewDelegate, UITableViewDataSource, Ch
             myMessages.append(message)
         }
         
-        if myMessages.count > ChatPollService.MAX_MESSAGES {
-            myMessages.removeFirst(myMessages.count - ChatPollService.MAX_MESSAGES)
+        if myMessages.count > ChatTableView.MAX_MESSAGES {
+            myMessages.removeFirst(myMessages.count - ChatTableView.MAX_MESSAGES)
         }
         
         dispatch_async(dispatch_get_main_queue()) {

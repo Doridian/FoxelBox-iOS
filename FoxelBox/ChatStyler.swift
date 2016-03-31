@@ -8,6 +8,7 @@
 
 import Foundation
 import UIKit
+import DTCoreText
 
 class ChatStyler {
     var tagReplacements: [String: String] = [String: String]()
@@ -46,16 +47,17 @@ class ChatStyler {
     
     let nsHTMLParseOptions: [String: AnyObject] = [
         NSDocumentTypeDocumentAttribute: NSHTMLTextDocumentType,
-        NSCharacterEncodingDocumentAttribute: NSUTF8StringEncoding
+        NSCharacterEncodingDocumentAttribute: NSUTF8StringEncoding,
+        DTDefaultFontName: "Helvetica",
+        DTDefaultFontSize: 14,
+        DTDefaultLinkDecoration: false,
+        DTDefaultLinkColor: "white",
+        DTUseiOS6Attributes: true
     ]
     
-    func formatMessage(msg: String, font: String, fontSize: CGFloat) -> NSAttributedString {
-        let data: NSData = ("<style>* { font-family: \(font); font-size: \(fontSize)px; }</style>" + fixTags(msg)).dataUsingEncoding(NSUTF8StringEncoding)!
-        do {
-            return try NSAttributedString(data: data, options: nsHTMLParseOptions, documentAttributes: nil)
-        } catch {
-            return NSAttributedString(string: msg)
-        }
+    func formatMessage(msg: String) -> NSAttributedString {
+        let data: NSData = fixTags(msg).dataUsingEncoding(NSUTF8StringEncoding)!
+        return DTHTMLAttributedStringBuilder(HTML: data, options: nsHTMLParseOptions, documentAttributes: nil).generatedAttributedString()
     }
     
     static let instance = ChatStyler()
