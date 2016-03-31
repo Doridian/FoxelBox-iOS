@@ -10,42 +10,72 @@ import Foundation
 import UIKit
 import DTCoreText
 
-class ChatStyler {
-    var tagReplacements: [String: String] = [String: String]()
+class ChatStyler : NSObject, NSXMLParserDelegate {
+    static let colorReplacements = [
+        "black": "#000000",
+        "dark_blue": "#0000BE",
+        "dark_green": "#00BE00",
+        "dark_aqua": "#00BEBE",
+        "dark_red": "#BE0000",
+        "dark_purple": "#BE00BE",
+        "gold": "#D9A334",
+        "gray": "#BEBEBE",
+        "dark_gray": "#3F3F3F",
+        "blue": "#3F3FFE",
+        "green": "#3FFE3F",
+        "aqua": "#3FFEFE",
+        "red": "#FE3F3F",
+        "light_purple": "#FE3FFE",
+        "yellow": "#FEFE3F",
+        "white": "#FFFFFF"
+    ]
     
-    init() {
-        addColor("black", color: "#000000")
-        addColor("dark_blue", color: "#0000BE")
-        addColor("dark_green", color: "#00BE00")
-        addColor("dark_aqua", color: "#00BEBE")
-        addColor("dark_red", color: "#BE0000")
-        addColor("dark_purple", color: "#BE00BE")
-        addColor("gold", color: "#D9A334")
-        addColor("gray", color: "#BEBEBE")
-        addColor("dark_gray", color: "#3F3F3F")
-        addColor("blue", color: "#3F3FFE")
-        addColor("green", color: "#3FFE3F")
-        addColor("aqua", color: "#3FFEFE")
-        addColor("red", color: "#FE3F3F")
-        addColor("light_purple", color: "#FE3FFE")
-        addColor("yellow", color: "#FEFE3F")
-        addColor("white", color: "#FFFFFF")
-        tagReplacements["</color>"] = "</font>"
+    var returnData = ""
+    
+    private func fixTags(msg :String) throws -> String {
+        let xmlData = ("<span>" + msg + "</span>").dataUsingEncoding(NSUTF8StringEncoding)
+        let xmlParser = NSXMLParser(data: xmlData!)
+        xmlParser.delegate = self
+        xmlParser.parse()
+
+        return "<span>" + returnData + "</span>"
     }
     
-    private func addColor(name: String, color: String) {
-        tagReplacements["<color name=\"\(name)\">"] = "<font color=\"\(color)\">"
-    }
+    var isSurroundedByA: [Bool] = [Bool]()
     
-    private func fixTags(msg :String) -> String {
-        var moddedMsg = msg
-        for (k, v) in tagReplacements {
-            moddedMsg = moddedMsg.stringByReplacingOccurrencesOfString(k, withString: v)
+    @objc func parser(parser: NSXMLParser, didStartElement elementName: String, namespaceURI: String?, qualifiedName qName: String?, attributes attributeDict: [String : String]) {
+        
+        if let onClick = attributeDict["onClick"] {
+            returnData += "<a href=\"" + onClick
+                .stringByAddingPercentEncodingWithAllowedCharacters(.URLHostAllowedCharacterSet())! + "\">"
+            isSurroundedByA.append(true)
+        } else {
+            isSurroundedByA.append(false)
         }
-        return moddedMsg
+        
+        if elementName == "color" {
+            returnData += "<font color=\"" + ChatStyler.colorReplacements[attributeDict["name"]!]! + "\">"
+        }
     }
     
-    let nsHTMLParseOptions: [String: AnyObject] = [
+    @objc func parser(parser: NSXMLParser, didEndElement elementName: String, namespaceURI: String?, qualifiedName qName: String?) {
+        if elementName == "color" {
+            returnData += "</font>"
+        }
+        
+        if isSurroundedByA.popLast()!.boolValue {
+            returnData += "</a>"
+        }
+    }
+    
+    @objc func parser(parser: NSXMLParser, foundCharacters string: String) {
+        returnData += string
+            .stringByReplacingOccurrencesOfString("&", withString: "&amp;")
+            .stringByReplacingOccurrencesOfString("<", withString: "&lt;")
+            .stringByReplacingOccurrencesOfString(">", withString: "&gt;")
+    }
+    
+    static let nsHTMLParseOptions: [String: AnyObject] = [
         NSDocumentTypeDocumentAttribute: NSHTMLTextDocumentType,
         NSCharacterEncodingDocumentAttribute: NSUTF8StringEncoding,
         DTDefaultFontName: "Helvetica",
@@ -53,13 +83,19 @@ class ChatStyler {
         DTDefaultTextColor: "white",
         DTDefaultLinkDecoration: false,
         DTDefaultLinkColor: "white",
+        DTDefaultLinkHighlightColor: "white",
         DTUseiOS6Attributes: true
     ]
     
-    func formatMessage(msg: String) -> NSAttributedString {
-        let data: NSData = ("<span>" + fixTags(msg) + "</span>").dataUsingEncoding(NSUTF8StringEncoding)!
-        return DTHTMLAttributedStringBuilder(HTML: data, options: nsHTMLParseOptions, documentAttributes: nil).generatedAttributedString()
+    static func formatMessage(msg: String) -> NSAttributedString {
+        do {
+            let instance = ChatStyler()
+            let data: NSData = try instance.fixTags(msg).dataUsingEncoding(NSUTF8StringEncoding)!
+            return DTHTMLAttributedStringBuilder(HTML: data, options: nsHTMLParseOptions, documentAttributes: nil).generatedAttributedString()
+        } catch let error {
+            print("Error: \(error)")
+            let dataNo = msg.dataUsingEncoding(NSUTF8StringEncoding)
+            return try! NSAttributedString(data: dataNo!, options: [:], documentAttributes: nil)
+        }
     }
-    
-    static let instance = ChatStyler()
 }

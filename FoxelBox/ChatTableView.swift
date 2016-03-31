@@ -23,7 +23,7 @@ class ChatTableView: UITableView, UITableViewDelegate, UITableViewDataSource, Ch
             if self.formatted != nil {
                 return self.formatted!
             }
-            self.formatted = ChatStyler.instance.formatMessage(
+            self.formatted = ChatStyler.formatMessage(
                 self.message.contents!
             )
             return self.formatted!
@@ -60,13 +60,77 @@ class ChatTableView: UITableView, UITableViewDelegate, UITableViewDataSource, Ch
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCellWithIdentifier("MessageCell")! as UITableViewCell
         
+        let textWeNeed = self.messageForIndexPath(indexPath).format()
         let textLabel = cell.subviews[0].subviews[0] as! UITextView
+        guard textLabel.attributedText != textWeNeed else {
+            return cell
+        }
+        textLabel.attributedText = textWeNeed
+        
+        guard textLabel.textContainerInset != UIEdgeInsetsZero else {
+            return cell
+        }
+        
+        textLabel.linkTextAttributes = [:]
         textLabel.textContainerInset = UIEdgeInsetsZero
-        textLabel.attributedText = self.messageForIndexPath(indexPath).format()
+        
+        let tapGestureRecognizer = UITapGestureRecognizer()
+        textLabel.addGestureRecognizer(tapGestureRecognizer)
+        tapGestureRecognizer.addTarget(self, action: #selector(textTapped))
         
         cell.transform = CGAffineTransformMakeScale(1, -1)
         
         return cell
+    }
+    
+    static let parseFunctionRegex = try! NSRegularExpression(pattern: "^(.+)\\('(.+)'\\)$",
+                                                             options: [])
+    
+    func textTapped(recognizer :UITapGestureRecognizer) {
+        let textView = recognizer.view as! UITextView
+        
+        let layoutManager = textView.layoutManager
+        let location = recognizer.locationInView(textView)
+        // We do not need to subtract insets as those are always 0!
+        
+        let charIndex = layoutManager.characterIndexForPoint(location, inTextContainer: textView.textContainer, fractionOfDistanceBetweenInsertionPoints: nil)
+        
+        guard charIndex < textView.textStorage.length else {
+            return
+        }
+        
+        var range = NSRange()
+        
+        guard let val = textView.attributedText.attribute(NSLinkAttributeName, atIndex: charIndex, effectiveRange: &range) else {
+            return
+        }
+        let urlVal = val as! NSURL
+        
+        let urlString = urlVal.absoluteString
+        
+        guard let result = ChatTableView.parseFunctionRegex.firstMatchInString(urlString, options: [], range: NSRange(location: 0, length: urlString.characters.count)) else {
+            return
+        }
+        
+        let function = (urlString as NSString).substringWithRange(result.rangeAtIndex(1))
+        let argument = (urlString as NSString).substringWithRange(result.rangeAtIndex(2))
+                        .stringByRemovingPercentEncoding!
+        
+        let chatViewController = self.getChatViewController()
+
+        switch function {
+        case "suggest_command":
+            chatViewController.chatTextField.text = argument
+            chatViewController.chatTextField.becomeFirstResponder()
+        case "run_command":
+            chatViewController.rawSendChatMessage(argument)
+        case "open_url":
+            if let url = NSURL(string: argument) {
+                UIApplication.sharedApplication().openURL(url)
+            }
+        default:
+            break
+        }
     }
     
     func tableView(tableView: UITableView, estimatedHeightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
@@ -86,8 +150,12 @@ class ChatTableView: UITableView, UITableViewDelegate, UITableViewDataSource, Ch
         self.setContentOffset(CGPoint.zero, animated: true)
     }
     
+    func getChatViewController() -> ChatViewController {
+        return (self.nextResponder()?.nextResponder() as! ChatViewController)
+    }
+    
     func setBadgeValue(badge :String?) {
-        (self.nextResponder()?.nextResponder() as! UIViewController).navigationController?.tabBarItem.badgeValue = badge
+        self.getChatViewController().navigationController?.tabBarItem.badgeValue = badge
     }
     
     func addMessages(messages: [ChatMessageOut]) {

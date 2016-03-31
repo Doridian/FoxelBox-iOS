@@ -23,7 +23,6 @@
 		CA2B243A1CA58A6C00D2C8AD /* APIJSON.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA2B24391CA58A6C00D2C8AD /* APIJSON.swift */; };
 		CA2B243C1CA59C4A00D2C8AD /* LoginAccessor.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA2B243B1CA59C4A00D2C8AD /* LoginAccessor.swift */; };
 		CA8451D61CA4C8F3001DE3B7 /* WebKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CA8451D51CA4C8F3001DE3B7 /* WebKit.framework */; };
-		CAC5020A1CA8C81C008BB1B0 /* demo.txt in Resources */ = {isa = PBXBuildFile; fileRef = CAC502091CA8C81B008BB1B0 /* demo.txt */; };
 		CAD260371CA85C63009EEED8 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = CAD260361CA85C63009EEED8 /* Assets.xcassets */; };
 		CAFFD8831CA5D3D30053E8F4 /* ChatSender.swift in Sources */ = {isa = PBXBuildFile; fileRef = CAFFD8821CA5D3D30053E8F4 /* ChatSender.swift */; };
 		CAFFD8851CA5DC9F0053E8F4 /* ChatStyler.swift in Sources */ = {isa = PBXBuildFile; fileRef = CAFFD8841CA5DC9F0053E8F4 /* ChatStyler.swift */; };
@@ -51,7 +50,6 @@
 		CA2B243B1CA59C4A00D2C8AD /* LoginAccessor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginAccessor.swift; sourceTree = "<group>"; };
 		CA2C638A1CAB027C007A3450 /* FoxelBox.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = FoxelBox.entitlements; sourceTree = "<group>"; };
 		CA8451D51CA4C8F3001DE3B7 /* WebKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WebKit.framework; path = System/Library/Frameworks/WebKit.framework; sourceTree = SDKROOT; };
-		CAC502091CA8C81B008BB1B0 /* demo.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = demo.txt; sourceTree = "<group>"; };
 		CAD260361CA85C63009EEED8 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		CAFFD8821CA5D3D30053E8F4 /* ChatSender.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChatSender.swift; sourceTree = "<group>"; };
 		CAFFD8841CA5DC9F0053E8F4 /* ChatStyler.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChatStyler.swift; sourceTree = "<group>"; };
@@ -81,7 +79,6 @@
 		CA05C2F61CA4C01E00D4EDD2 = {
 			isa = PBXGroup;
 			children = (
-				CAC502091CA8C81B008BB1B0 /* demo.txt */,
 				CA8451D51CA4C8F3001DE3B7 /* WebKit.framework */,
 				CA05C3011CA4C01E00D4EDD2 /* FoxelBox */,
 				CA05C3001CA4C01E00D4EDD2 /* Products */,
@@ -211,7 +208,6 @@
 				CA05C30F1CA4C01E00D4EDD2 /* LaunchScreen.storyboard in Resources */,
 				CAD260371CA85C63009EEED8 /* Assets.xcassets in Resources */,
 				CA05C30A1CA4C01E00D4EDD2 /* Main.storyboard in Resources */,
-				CAC5020A1CA8C81C008BB1B0 /* demo.txt in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -68,18 +68,22 @@ class ChatViewController: UIViewController, UITextFieldDelegate, ChatErrorReceiv
     }
     
     @IBAction func sendChatMessage(sender: AnyObject) {
-        guard self.canSendChat else {
-            return
-        }
-        
         let chatMessage = self.chatTextField.text
         guard chatMessage != nil && chatMessage != "" else {
             return
         }
         
+        self.rawSendChatMessage(chatMessage!)
+    }
+    
+    func rawSendChatMessage(chatMessage: String) {
+        guard self.canSendChat else {
+            return
+        }
+        
         self.isSendingMessage = true
         self.loginStateChanged()
-        ChatSender.instance.sendMessage(chatMessage!) { response in
+        ChatSender.instance.sendMessage(chatMessage) { response in
             self.isSendingMessage = false
             self.loginStateChanged()
             dispatch_async(dispatch_get_main_queue()) {
