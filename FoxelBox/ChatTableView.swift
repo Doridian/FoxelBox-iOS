@@ -101,7 +101,7 @@ class ChatTableView: UITableView, UITableViewDelegate, UITableViewDataSource, Ch
         
         var range = NSRange()
         
-        guard let val = textView.attributedText.attribute(NSLinkAttributeName, atIndex: charIndex, effectiveRange: &range) else {
+        guard let val = textView.textStorage.attribute(NSLinkAttributeName, atIndex: charIndex, effectiveRange: &range) else {
             return
         }
         let urlVal = val as! NSURL
@@ -120,8 +120,7 @@ class ChatTableView: UITableView, UITableViewDelegate, UITableViewDataSource, Ch
 
         switch function {
         case "suggest_command":
-            chatViewController.chatTextField.text = argument
-            chatViewController.chatTextField.becomeFirstResponder()
+            chatViewController.setChatMessage(argument)
         case "run_command":
             chatViewController.rawSendChatMessage(argument)
         case "open_url":

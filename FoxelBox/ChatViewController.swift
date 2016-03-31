@@ -67,6 +67,15 @@ class ChatViewController: UIViewController, UITextFieldDelegate, ChatErrorReceiv
         return true
     }
     
+    func setChatMessage(message: String) {
+        guard self.canSendChat else {
+            return
+        }
+        
+        self.chatTextField.text = message
+        self.chatTextField.becomeFirstResponder()
+    }
+    
     @IBAction func sendChatMessage(sender: AnyObject) {
         let chatMessage = self.chatTextField.text
         guard chatMessage != nil && chatMessage != "" else {
