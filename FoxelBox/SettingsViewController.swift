@@ -16,6 +16,7 @@ class SettingsViewController: UITableViewController, LoginReceiver {
     @IBOutlet weak var usernameCell: UITableViewCell!
     @IBOutlet weak var websiteTableCell: UITableViewCell!
     @IBOutlet weak var logoutTableCell: UITableViewCell!
+    @IBOutlet weak var legalTableCell: UITableViewCell!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -55,17 +56,8 @@ class SettingsViewController: UITableViewController, LoginReceiver {
                     APIAccessor.loginUtil.askLogin()
                 }
             }
-        } else if let label = cell?.contentView.subviews[0] as! UILabel? {
-            do {
-                let resPath = NSURL(fileURLWithPath: NSBundle.mainBundle().resourcePath!)
-                    .URLByAppendingPathComponent("LICENSES")
-                    .URLByAppendingPathComponent(label.text!)
-                let text = try String(contentsOfURL: resPath, encoding: NSUTF8StringEncoding)
-                
-                self.navigationController!.performSegueWithIdentifier("LegalSegue", sender: text)
-            } catch let error {
-                print(error)
-            }
+        } else if cell == legalTableCell {
+            self.navigationController!.performSegueWithIdentifier("LegalSegue", sender: self)
         }
     }
     

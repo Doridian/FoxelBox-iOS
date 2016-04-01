@@ -23,8 +23,6 @@
 		CA2B243A1CA58A6C00D2C8AD /* APIJSON.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA2B24391CA58A6C00D2C8AD /* APIJSON.swift */; };
 		CA2B243C1CA59C4A00D2C8AD /* LoginAccessor.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA2B243B1CA59C4A00D2C8AD /* LoginAccessor.swift */; };
 		CA4E964A1CADDA9F00EFBC14 /* LegalViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA4E96491CADDA9F00EFBC14 /* LegalViewController.swift */; };
-		CA4E964F1CADDE6F00EFBC14 /* LICENSES in Resources */ = {isa = PBXBuildFile; fileRef = CA4E964E1CADDE6F00EFBC14 /* LICENSES */; };
-		CA4E96511CADE33400EFBC14 /* SettingsNavigationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA4E96501CADE33400EFBC14 /* SettingsNavigationController.swift */; };
 		CA8451D61CA4C8F3001DE3B7 /* WebKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CA8451D51CA4C8F3001DE3B7 /* WebKit.framework */; };
 		CAD260371CA85C63009EEED8 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = CAD260361CA85C63009EEED8 /* Assets.xcassets */; };
 		CAFFD8831CA5D3D30053E8F4 /* ChatSender.swift in Sources */ = {isa = PBXBuildFile; fileRef = CAFFD8821CA5D3D30053E8F4 /* ChatSender.swift */; };
@@ -42,6 +40,7 @@
 		CA05C3091CA4C01E00D4EDD2 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		CA05C30E1CA4C01E00D4EDD2 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		CA05C3101CA4C01E00D4EDD2 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		CA0B9CB51CAEAF8C001160AD /* LICENSES */ = {isa = PBXFileReference; lastKnownFileType = folder; path = LICENSES; sourceTree = "<group>"; };
 		CA1B7E261CA62D2300192883 /* UIEventedTabBarController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIEventedTabBarController.swift; sourceTree = "<group>"; };
 		CA1B7E2A1CA82A9200192883 /* SettingsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SettingsViewController.swift; sourceTree = "<group>"; };
 		CA1D4EFD1CA6144700773609 /* LaunchViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LaunchViewController.swift; sourceTree = "<group>"; };
@@ -53,8 +52,6 @@
 		CA2B243B1CA59C4A00D2C8AD /* LoginAccessor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginAccessor.swift; sourceTree = "<group>"; };
 		CA2C638A1CAB027C007A3450 /* FoxelBox.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = FoxelBox.entitlements; sourceTree = "<group>"; };
 		CA4E96491CADDA9F00EFBC14 /* LegalViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LegalViewController.swift; sourceTree = "<group>"; };
-		CA4E964E1CADDE6F00EFBC14 /* LICENSES */ = {isa = PBXFileReference; lastKnownFileType = folder; path = LICENSES; sourceTree = "<group>"; };
-		CA4E96501CADE33400EFBC14 /* SettingsNavigationController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SettingsNavigationController.swift; sourceTree = "<group>"; };
 		CA8451D51CA4C8F3001DE3B7 /* WebKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WebKit.framework; path = System/Library/Frameworks/WebKit.framework; sourceTree = SDKROOT; };
 		CAD260361CA85C63009EEED8 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		CAFFD8821CA5D3D30053E8F4 /* ChatSender.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChatSender.swift; sourceTree = "<group>"; };
@@ -85,6 +82,7 @@
 		CA05C2F61CA4C01E00D4EDD2 = {
 			isa = PBXGroup;
 			children = (
+				CA0B9CB51CAEAF8C001160AD /* LICENSES */,
 				CA8451D51CA4C8F3001DE3B7 /* WebKit.framework */,
 				CA05C3011CA4C01E00D4EDD2 /* FoxelBox */,
 				CA05C3001CA4C01E00D4EDD2 /* Products */,
@@ -105,7 +103,6 @@
 			isa = PBXGroup;
 			children = (
 				CA2C638A1CAB027C007A3450 /* FoxelBox.entitlements */,
-				CA4E964E1CADDE6F00EFBC14 /* LICENSES */,
 				CA2B24331CA5834E00D2C8AD /* ChatService */,
 				CA05C3021CA4C01E00D4EDD2 /* AppDelegate.swift */,
 				CA05C3041CA4C01E00D4EDD2 /* ChatViewController.swift */,
@@ -120,7 +117,6 @@
 				CA1B7E261CA62D2300192883 /* UIEventedTabBarController.swift */,
 				CA1B7E2A1CA82A9200192883 /* SettingsViewController.swift */,
 				CA4E96491CADDA9F00EFBC14 /* LegalViewController.swift */,
-				CA4E96501CADE33400EFBC14 /* SettingsNavigationController.swift */,
 			);
 			path = FoxelBox;
 			sourceTree = "<group>";
@@ -160,6 +156,7 @@
 				CA05C2FD1CA4C01E00D4EDD2 /* Resources */,
 				9ADC424EDD9EF315EEFC51D4 /* Embed Pods Frameworks */,
 				ACA5BCCB34A67FE80B5C3585 /* Copy Pods Resources */,
+				CA7887851CAE993F00E0BB9C /* ShellScript */,
 			);
 			buildRules = (
 			);
@@ -216,7 +213,6 @@
 			files = (
 				CA05C30F1CA4C01E00D4EDD2 /* LaunchScreen.storyboard in Resources */,
 				CAD260371CA85C63009EEED8 /* Assets.xcassets in Resources */,
-				CA4E964F1CADDE6F00EFBC14 /* LICENSES in Resources */,
 				CA05C30A1CA4C01E00D4EDD2 /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -269,6 +265,19 @@
 			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-FoxelBox/Pods-FoxelBox-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
+		CA7887851CAE993F00E0BB9C /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "output=\"${CONFIGURATION_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/Legal.html\"\ninput=\"${SRCROOT}/LICENSES/\"\n\nechonl() { echo \"<p></p>\" >> \"$output\"; }\n\necho \"<span>\" > \"$output\"\nfor file in $(ls \"${input}\"); do\n    absfile=\"${input}${file}\"\n    echo \"<h2>$file</h2><p>\" >> \"$output\"\n    cat \"$absfile\" | sed 's/&/\\&amp;/g' | sed 's/</\\&lt;/g' | sed 's/>/\\&gt;/g' | sed 's~^$~</p><p>~g' >> \"$output\"\n    echo \"</p>\" >> \"$output\"\n    echonl\ndone\necho \"</span>\" >> \"$output\"";
+		};
 /* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
@@ -286,7 +295,6 @@
 				CA4E964A1CADDA9F00EFBC14 /* LegalViewController.swift in Sources */,
 				CAFFD8831CA5D3D30053E8F4 /* ChatSender.swift in Sources */,
 				CA1D4EFE1CA6144700773609 /* LaunchViewController.swift in Sources */,
-				CA4E96511CADE33400EFBC14 /* SettingsNavigationController.swift in Sources */,
 				CA1B7E2B1CA82A9200192883 /* SettingsViewController.swift in Sources */,
 				CA05C3051CA4C01E00D4EDD2 /* ChatViewController.swift in Sources */,
 				CAFFD8851CA5DC9F0053E8F4 /* ChatStyler.swift in Sources */,

@@ -7,16 +7,33 @@
 //
 
 import UIKit
+import DTCoreText
 
 class LegalViewController: UIViewController {
     @IBOutlet weak var legalTextView: UITextView!
     
-    var legalText :String?
+    static let nsHTMLParseOptions: [String: AnyObject] = [
+        NSDocumentTypeDocumentAttribute: NSHTMLTextDocumentType,
+        NSCharacterEncodingDocumentAttribute: NSUTF8StringEncoding,
+        DTDefaultFontName: "Helvetica",
+        DTDefaultFontSize: 10,
+        DTDefaultTextColor: "white",
+        DTDefaultLinkDecoration: false,
+        DTDefaultLinkColor: "white",
+        DTDefaultLinkHighlightColor: "white",
+        DTDefaultFontFamily: "Helvetica",
+        DTUseiOS6Attributes: true
+    ]
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        self.legalTextView.text = self.legalText
+        let resPath = NSURL(fileURLWithPath: NSBundle.mainBundle().resourcePath!)
+            .URLByAppendingPathComponent("Legal.html")
+
+        let str = NSData(contentsOfURL: resPath)
+
+        self.legalTextView.attributedText = DTHTMLAttributedStringBuilder(HTML: str, options: LegalViewController.nsHTMLParseOptions, documentAttributes: nil).generatedAttributedString()
     }
     
     override func viewDidLayoutSubviews() {
