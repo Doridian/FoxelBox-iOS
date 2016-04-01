@@ -12,28 +12,26 @@ import DTCoreText
 class LegalViewController: UIViewController {
     @IBOutlet weak var legalTextView: UITextView!
     
-    static let nsHTMLParseOptions: [String: AnyObject] = [
-        NSDocumentTypeDocumentAttribute: NSHTMLTextDocumentType,
-        NSCharacterEncodingDocumentAttribute: NSUTF8StringEncoding,
-        DTDefaultFontName: "Helvetica",
-        DTDefaultFontSize: 10,
-        DTDefaultTextColor: "white",
-        DTDefaultLinkDecoration: false,
-        DTDefaultLinkColor: "white",
-        DTDefaultLinkHighlightColor: "white",
-        DTDefaultFontFamily: "Helvetica",
-        DTUseiOS6Attributes: true
-    ]
-    
-    override func viewDidLoad() {
-        super.viewDidLoad()
+    override func loadView() {
+        super.loadView()
         
         let resPath = NSURL(fileURLWithPath: NSBundle.mainBundle().resourcePath!)
             .URLByAppendingPathComponent("Legal.html")
 
         let str = NSData(contentsOfURL: resPath)
 
-        self.legalTextView.attributedText = DTHTMLAttributedStringBuilder(HTML: str, options: LegalViewController.nsHTMLParseOptions, documentAttributes: nil).generatedAttributedString()
+        self.legalTextView.attributedText = DTHTMLAttributedStringBuilder(HTML: str, options: [
+            NSDocumentTypeDocumentAttribute: NSHTMLTextDocumentType,
+            NSCharacterEncodingDocumentAttribute: NSUTF8StringEncoding,
+            DTDefaultFontName: "Helvetica",
+            DTDefaultFontSize: 10,
+            DTDefaultTextColor: "white",
+            DTDefaultLinkDecoration: false,
+            DTDefaultLinkColor: "white",
+            DTDefaultLinkHighlightColor: "white",
+            DTDefaultFontFamily: "Helvetica",
+            DTUseiOS6Attributes: true
+            ], documentAttributes: nil).generatedAttributedString()
     }
     
     override func viewDidLayoutSubviews() {
