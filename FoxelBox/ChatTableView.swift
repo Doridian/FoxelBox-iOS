@@ -31,9 +31,7 @@ class ChatTableView: UITableView, UITableViewDelegate, UITableViewDataSource, Ch
     }
     
     private var messagesArray: [CachingMessage] = [CachingMessage]()
-    
-    var lastYOffset: CGFloat = 0
-    var autoScrolling = true
+    private var lastBadgeValue :String?
     
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
@@ -140,9 +138,10 @@ class ChatTableView: UITableView, UITableViewDelegate, UITableViewDataSource, Ch
     }
     
     func scrollViewDidScroll(scrollView: UIScrollView) {
-        if self.contentOffset.y == 0 {
-            self.setBadgeValue(nil)
+        guard self.contentOffset.y <= 0 else {
+            return
         }
+        self.setBadgeValue(nil)
     }
     
     func scrollToBottom() {
@@ -154,7 +153,11 @@ class ChatTableView: UITableView, UITableViewDelegate, UITableViewDataSource, Ch
     }
     
     func setBadgeValue(badge :String?) {
+        guard self.lastBadgeValue != badge else {
+            return
+        }
         self.getChatViewController().navigationController?.tabBarItem.badgeValue = badge
+        self.lastBadgeValue = badge
     }
     
     func addMessages(messages: [ChatMessageOut]) {
