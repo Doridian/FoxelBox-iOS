@@ -156,7 +156,7 @@
 				CA05C2FD1CA4C01E00D4EDD2 /* Resources */,
 				9ADC424EDD9EF315EEFC51D4 /* Embed Pods Frameworks */,
 				ACA5BCCB34A67FE80B5C3585 /* Copy Pods Resources */,
-				CA7887851CAE993F00E0BB9C /* ShellScript */,
+				CA7887851CAE993F00E0BB9C /* Translate LICENSES to html file */,
 			);
 			buildRules = (
 			);
@@ -265,13 +265,14 @@
 			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-FoxelBox/Pods-FoxelBox-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
-		CA7887851CAE993F00E0BB9C /* ShellScript */ = {
+		CA7887851CAE993F00E0BB9C /* Translate LICENSES to html file */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			inputPaths = (
 			);
+			name = "Translate LICENSES to html file";
 			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
