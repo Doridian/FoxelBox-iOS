@@ -13,6 +13,9 @@ class MapViewController: UIViewController, WKNavigationDelegate {
     private weak var webView: WKWebView?
     @IBOutlet weak var refreshButton: UIBarButtonItem!
     
+    var inNavigation :UInt8 = 0
+    var hasLoaded = false
+    
     override func loadView() {
         super.loadView()
         
@@ -54,11 +57,23 @@ class MapViewController: UIViewController, WKNavigationDelegate {
             )
         ])
     }
-
-    override func viewDidLoad() {
-        super.viewDidLoad()
+    
+    deinit {
+        self.endLoad()
+    }
+    
+    override func viewDidAppear(animated: Bool) {
+        super.viewDidAppear(animated)
         
-        self.reload()
+        if !self.hasLoaded {
+            self.reload()
+        }
+    }
+    
+    override func viewDidDisappear(animated: Bool) {
+        super.viewDidDisappear(animated)
+        
+        self.endLoad()
     }
     
     @IBAction func refresh(sender: AnyObject) {
@@ -71,16 +86,29 @@ class MapViewController: UIViewController, WKNavigationDelegate {
         webView?.loadRequest(req)
     }
     
+    func beginLoad() {
+        if !OSAtomicTestAndSet(0, &self.inNavigation) {
+            APIAccessor.incrementRequestsInProgress(1)
+        }
+    }
+    
+    func endLoad() {
+        if OSAtomicTestAndClear(0, &self.inNavigation) {
+            APIAccessor.incrementRequestsInProgress(-1)
+        }
+    }
+    
     override func preferredStatusBarStyle() -> UIStatusBarStyle {
         return UIStatusBarStyle.LightContent
     }
     
     func webView(webView: WKWebView, didStartProvisionalNavigation navigation: WKNavigation!) {
-        APIAccessor.incrementRequestsInProgress(1)
+        self.beginLoad()
     }
     
     func webView(webView: WKWebView, didFinishNavigation navigation: WKNavigation!) {
-        APIAccessor.incrementRequestsInProgress(-1)
+        self.endLoad()
+        self.hasLoaded = true
     }
 }
 
