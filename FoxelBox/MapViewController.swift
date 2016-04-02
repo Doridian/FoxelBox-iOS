@@ -11,7 +11,6 @@ import WebKit
 
 class MapViewController: UIViewController, WKNavigationDelegate {
     private weak var webView: WKWebView?
-    @IBOutlet weak var refreshButton: UIBarButtonItem!
     
     var inNavigation :UInt8 = 0
     var hasLoaded = false
