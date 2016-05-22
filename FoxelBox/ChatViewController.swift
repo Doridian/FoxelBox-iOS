@@ -30,9 +30,8 @@ class ChatViewController: UIViewController, UITextFieldDelegate, ChatErrorReceiv
         
         AppDelegate.chatPoller.errorReceiver = self
         
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(ChatViewController.keyboardWillShowHide(_:)), name:UIKeyboardWillShowNotification, object: nil)
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(ChatViewController.keyboardWillShowHide(_:)), name:UIKeyboardWillHideNotification, object: nil)
-        
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(ChatViewController.keyboardWillChangeFrame(_:)), name:UIKeyboardWillChangeFrameNotification, object: nil)
+
         self.CHAT_BAR_BASE_HEIGHT = self.chatBarHeightConstraint.constant
         self.CHAT_TEXT_BASE_COLOR = self.chatTextField.textColor
         self.CHAT_TEXT_DISABLED_COLOR = UIColor.darkGrayColor()
@@ -147,18 +146,20 @@ class ChatViewController: UIViewController, UITextFieldDelegate, ChatErrorReceiv
         APIAccessor.loginUtil.askLogin("You need to be logged in to send chat messages")
     }
     
-    func keyboardWillShowHide(notification: NSNotification) {
+    func keyboardWillChangeFrame(notification: NSNotification) {
         let info = notification.userInfo!
         
-        let keyboardFrameBegin: CGRect = self.view.convertRect((info[UIKeyboardFrameBeginUserInfoKey] as! NSValue).CGRectValue(), fromView: nil)
+        let animationDuration = info[UIKeyboardAnimationDurationUserInfoKey]!.doubleValue
+        
         let keyboardFrameEnd: CGRect = self.view.convertRect((info[UIKeyboardFrameEndUserInfoKey] as! NSValue).CGRectValue(), fromView: nil)
         
-        UIView.animateWithDuration(-1) {
-            var offsetHeight = (keyboardFrameBegin.origin.y - keyboardFrameEnd.origin.y) + (self.chatBarView.frame.maxY - self.view.frame.maxY)
-            if offsetHeight < 0 {
-                offsetHeight = 0
-            }
-            self.chatBarHeightConstraint.constant = self.CHAT_BAR_BASE_HEIGHT + offsetHeight
+        var offsetHeight = (self.view.bounds.size.height - keyboardFrameEnd.origin.y) + (self.chatBarView.frame.maxY - self.view.frame.maxY)
+        if offsetHeight < 0 {
+            offsetHeight = 0
+        }
+        self.chatBarHeightConstraint.constant = self.CHAT_BAR_BASE_HEIGHT + offsetHeight
+        
+        UIView.animateWithDuration(animationDuration) {
             self.view.layoutIfNeeded()
         }
     }
