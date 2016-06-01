@@ -8,6 +8,7 @@
 
 import Foundation
 import KeychainAccess
+import Crashlytics
 
 protocol LoginReceiver: class {
     func loginStateChanged()
@@ -253,6 +254,9 @@ class LoginAccessor: APIAccessor {
             return
         }
         
+        Crashlytics.sharedInstance().setUserName(self.username)
+        Crashlytics.sharedInstance().setUserIdentifier(nil)
+        
         self.sessionToken = nil
         
         self.doLogin(callback: callback)
@@ -263,7 +267,11 @@ class LoginAccessor: APIAccessor {
     func logout(unsetUsername :Bool=false, clearChat :Bool=true) {
         if unsetUsername {
             self.username = nil
+            Crashlytics.sharedInstance().setUserName(nil)
         }
+        
+        Crashlytics.sharedInstance().setUserIdentifier(nil)
+        
         self.password = nil
         self.sessionToken = nil
         self.cancel(true)
@@ -302,8 +310,12 @@ class LoginAccessor: APIAccessor {
             "password": self.password!
         ], noSession: true, waitOnLogin: false) { response in
             if response.success {
+                Crashlytics.sharedInstance().setUserIdentifier(self.username)
+                
                 self.loginStateChanged()
                 self.saveCredentials()
+            } else {
+                Crashlytics.sharedInstance().setUserIdentifier(nil)
             }
             callback?(response)
         }

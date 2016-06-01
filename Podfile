@@ -9,5 +9,7 @@ target 'FoxelBox' do
     pod 'KeychainAccess'
     pod 'JLToast', '~> 1.3'
     pod 'DTCoreText'
+    pod 'Fabric'
+    pod 'Crashlytics'
 end
 
