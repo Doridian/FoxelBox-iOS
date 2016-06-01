@@ -113,7 +113,19 @@ class ChatViewController: UIViewController, UITextFieldDelegate, ChatErrorReceiv
     }
     
     func textField(textField: UITextField, shouldChangeCharactersInRange range: NSRange, replacementString string: String) -> Bool {
-        return self.canSendChat
+        if !self.canSendChat {
+            return false
+        }
+        
+        let currentCharacterCount = textField.text?.characters.count ?? 0
+        
+        // Prevent the text field crashing by editing outside of its own range
+        if (range.length + range.location > currentCharacterCount) {
+            return false
+        }
+        
+        // Prevent the text field from growing above 240 characters
+        return ((currentCharacterCount - range.length) + string.characters.count) <= 240
     }
     
     func loginStateChanged() {
