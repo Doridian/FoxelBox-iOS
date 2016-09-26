@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		631798497EC90B134842837E /* Pods_FoxelBox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 68A909FCAD8AFCC14AB8E681 /* Pods_FoxelBox.framework */; };
 		CA05C3031CA4C01E00D4EDD2 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA05C3021CA4C01E00D4EDD2 /* AppDelegate.swift */; };
 		CA05C3051CA4C01E00D4EDD2 /* ChatViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA05C3041CA4C01E00D4EDD2 /* ChatViewController.swift */; };
 		CA05C3071CA4C01E00D4EDD2 /* MapViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA05C3061CA4C01E00D4EDD2 /* MapViewController.swift */; };
@@ -26,12 +27,10 @@
 		CAD260371CA85C63009EEED8 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = CAD260361CA85C63009EEED8 /* Assets.xcassets */; };
 		CAFFD8831CA5D3D30053E8F4 /* ChatSender.swift in Sources */ = {isa = PBXBuildFile; fileRef = CAFFD8821CA5D3D30053E8F4 /* ChatSender.swift */; };
 		CAFFD8851CA5DC9F0053E8F4 /* ChatStyler.swift in Sources */ = {isa = PBXBuildFile; fileRef = CAFFD8841CA5DC9F0053E8F4 /* ChatStyler.swift */; };
-		DE80787BE5574BBED7B406E5 /* Pods_FoxelBox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D09DA89B22E6D735B124CBAD /* Pods_FoxelBox.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		5B214A0D663CE06EFE623320 /* Pods-FoxelBox.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-FoxelBox.release.xcconfig"; path = "Pods/Target Support Files/Pods-FoxelBox/Pods-FoxelBox.release.xcconfig"; sourceTree = "<group>"; };
-		B9FC0B851956A03D812DABE2 /* Pods-FoxelBox.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-FoxelBox.debug.xcconfig"; path = "Pods/Target Support Files/Pods-FoxelBox/Pods-FoxelBox.debug.xcconfig"; sourceTree = "<group>"; };
+		68A909FCAD8AFCC14AB8E681 /* Pods_FoxelBox.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_FoxelBox.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		CA05C2FF1CA4C01E00D4EDD2 /* FoxelBox.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = FoxelBox.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		CA05C3021CA4C01E00D4EDD2 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		CA05C3041CA4C01E00D4EDD2 /* ChatViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatViewController.swift; sourceTree = "<group>"; };
@@ -55,7 +54,8 @@
 		CAD260361CA85C63009EEED8 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		CAFFD8821CA5D3D30053E8F4 /* ChatSender.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChatSender.swift; sourceTree = "<group>"; };
 		CAFFD8841CA5DC9F0053E8F4 /* ChatStyler.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChatStyler.swift; sourceTree = "<group>"; };
-		D09DA89B22E6D735B124CBAD /* Pods_FoxelBox.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_FoxelBox.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		D55B850D2F3E1756240BA0F3 /* Pods-FoxelBox.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-FoxelBox.debug.xcconfig"; path = "Pods/Target Support Files/Pods-FoxelBox/Pods-FoxelBox.debug.xcconfig"; sourceTree = "<group>"; };
+		FE7A4CB515B4E3E41BF8E280 /* Pods-FoxelBox.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-FoxelBox.release.xcconfig"; path = "Pods/Target Support Files/Pods-FoxelBox/Pods-FoxelBox.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -64,28 +64,28 @@
 			buildActionMask = 2147483647;
 			files = (
 				CA8451D61CA4C8F3001DE3B7 /* WebKit.framework in Frameworks */,
-				DE80787BE5574BBED7B406E5 /* Pods_FoxelBox.framework in Frameworks */,
+				631798497EC90B134842837E /* Pods_FoxelBox.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		0616E1277DE58B142F5C40A5 /* Pods */ = {
+		242C5B8B40AD982E3B9ABAF4 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				B9FC0B851956A03D812DABE2 /* Pods-FoxelBox.debug.xcconfig */,
-				5B214A0D663CE06EFE623320 /* Pods-FoxelBox.release.xcconfig */,
-			);
-			name = Pods;
-			sourceTree = "<group>";
-		};
-		76D6DC799DB374244D86D6D0 /* Frameworks */ = {
-			isa = PBXGroup;
-			children = (
-				D09DA89B22E6D735B124CBAD /* Pods_FoxelBox.framework */,
+				68A909FCAD8AFCC14AB8E681 /* Pods_FoxelBox.framework */,
 			);
 			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		A034519B190E6F354DAD72AF /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				D55B850D2F3E1756240BA0F3 /* Pods-FoxelBox.debug.xcconfig */,
+				FE7A4CB515B4E3E41BF8E280 /* Pods-FoxelBox.release.xcconfig */,
+			);
+			name = Pods;
 			sourceTree = "<group>";
 		};
 		CA05C2F61CA4C01E00D4EDD2 = {
@@ -95,8 +95,8 @@
 				CA8451D51CA4C8F3001DE3B7 /* WebKit.framework */,
 				CA05C3011CA4C01E00D4EDD2 /* FoxelBox */,
 				CA05C3001CA4C01E00D4EDD2 /* Products */,
-				0616E1277DE58B142F5C40A5 /* Pods */,
-				76D6DC799DB374244D86D6D0 /* Frameworks */,
+				A034519B190E6F354DAD72AF /* Pods */,
+				242C5B8B40AD982E3B9ABAF4 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -150,14 +150,14 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = CA05C3131CA4C01E00D4EDD2 /* Build configuration list for PBXNativeTarget "FoxelBox" */;
 			buildPhases = (
-				5F5B23BD3B3A57884AAEF4C6 /* [CP] Check Pods Manifest.lock */,
+				7C9181D2583819F911F0CB05 /* [CP] Check Pods Manifest.lock */,
 				CA05C2FB1CA4C01E00D4EDD2 /* Sources */,
 				CA05C2FC1CA4C01E00D4EDD2 /* Frameworks */,
 				CA05C2FD1CA4C01E00D4EDD2 /* Resources */,
 				CA7887851CAE993F00E0BB9C /* Translate LICENSES to html file */,
 				CA6738641CFEE86500FD17B1 /* Fabric */,
-				280354D8B6203C68C4F0B8E1 /* [CP] Embed Pods Frameworks */,
-				B646C2E7CC12AA921A58956F /* [CP] Copy Pods Resources */,
+				CBBFC3D48F4AC158B96BAB0B /* [CP] Embed Pods Frameworks */,
+				FFA1F8EFF5AEB255EA9DB7F2 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -182,6 +182,7 @@
 						CreatedOnToolsVersion = 7.3;
 						DevelopmentTeam = 9SQJYMRUP9;
 						LastSwiftMigration = 0800;
+						ProvisioningStyle = Automatic;
 						SystemCapabilities = {
 							com.apple.SafariKeychain = {
 								enabled = 1;
@@ -222,22 +223,7 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		280354D8B6203C68C4F0B8E1 /* [CP] Embed Pods Frameworks */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "[CP] Embed Pods Frameworks";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-FoxelBox/Pods-FoxelBox-frameworks.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
-		5F5B23BD3B3A57884AAEF4C6 /* [CP] Check Pods Manifest.lock */ = {
+		7C9181D2583819F911F0CB05 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -249,22 +235,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [[ $? != 0 ]] ; then\n    cat << EOM\nerror: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\nEOM\n    exit 1\nfi\n";
-			showEnvVarsInLog = 0;
-		};
-		B646C2E7CC12AA921A58956F /* [CP] Copy Pods Resources */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "[CP] Copy Pods Resources";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-FoxelBox/Pods-FoxelBox-resources.sh\"\n";
+			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n";
 			showEnvVarsInLog = 0;
 		};
 		CA6738641CFEE86500FD17B1 /* Fabric */ = {
@@ -294,6 +265,36 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "output=\"${CONFIGURATION_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/Legal.html\"\ninput=\"${SRCROOT}/LICENSES/\"\n\nechonl() { echo \"<p></p>\" >> \"$output\"; }\n\necho \"<span>\" > \"$output\"\nfor file in $(ls \"${input}\"); do\n    absfile=\"${input}${file}\"\n    echo \"<h2>$file</h2><p>\" >> \"$output\"\n    cat \"$absfile\" | sed 's/&/\\&amp;/g' | sed 's/</\\&lt;/g' | sed 's/>/\\&gt;/g' | sed 's~^$~</p><p>~g' >> \"$output\"\n    echo \"</p>\" >> \"$output\"\n    echonl\ndone\necho \"</span>\" >> \"$output\"";
+		};
+		CBBFC3D48F4AC158B96BAB0B /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-FoxelBox/Pods-FoxelBox-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		FFA1F8EFF5AEB255EA9DB7F2 /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Copy Pods Resources";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-FoxelBox/Pods-FoxelBox-resources.sh\"\n";
+			showEnvVarsInLog = 0;
 		};
 /* End PBXShellScriptBuildPhase section */
 
@@ -434,14 +435,14 @@
 		};
 		CA05C3141CA4C01E00D4EDD2 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = B9FC0B851956A03D812DABE2 /* Pods-FoxelBox.debug.xcconfig */;
+			baseConfigurationReference = D55B850D2F3E1756240BA0F3 /* Pods-FoxelBox.debug.xcconfig */;
 			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = FoxelBox/FoxelBox.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEVELOPMENT_TEAM = 9SQJYMRUP9;
 				INFOPLIST_FILE = FoxelBox/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
@@ -455,13 +456,13 @@
 		};
 		CA05C3151CA4C01E00D4EDD2 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 5B214A0D663CE06EFE623320 /* Pods-FoxelBox.release.xcconfig */;
+			baseConfigurationReference = FE7A4CB515B4E3E41BF8E280 /* Pods-FoxelBox.release.xcconfig */;
 			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = FoxelBox/FoxelBox.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Distribution";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				DEVELOPMENT_TEAM = 9SQJYMRUP9;
 				INFOPLIST_FILE = FoxelBox/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
