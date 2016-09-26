@@ -9,20 +9,20 @@
 import Foundation
 
 protocol ChatReceiver: class {
-    func addMessages(messages: [ChatMessageOut])
+    func addMessages(_ messages: [ChatMessageOut])
     func clearMessages()
 }
 
 protocol ChatErrorReceiver: class {
-    func setPollError(message :String?)
+    func setPollError(_ message :String?)
 }
 
 class ChatPollService: APIAccessor, LoginReceiver {
     internal static let MAX_MESSAGES = 100
     
     var maxID :Int = -1
-    var chatReceivers: NSHashTable = NSHashTable.weakObjectsHashTable()
-    var lateChatReceivers: NSHashTable = NSHashTable.weakObjectsHashTable()
+    var chatReceivers: NSHashTable<AnyObject> = NSHashTable.weakObjects()
+    var lateChatReceivers: NSHashTable<AnyObject> = NSHashTable.weakObjects()
     var chatHistory: [ChatMessageOut] = [ChatMessageOut]()
     
     var pollScheduled: UInt8 = 0
@@ -75,7 +75,7 @@ class ChatPollService: APIAccessor, LoginReceiver {
         return false
     }
     
-    override func onSuccess(response: BaseResponse) throws {
+    override func onSuccess(_ response: BaseResponse) throws {
         let myResponse = try MessageReply(response.result!)
 
         self.pollScheduled = 0
@@ -99,7 +99,7 @@ class ChatPollService: APIAccessor, LoginReceiver {
             for receiver in lateChatReceivers.objectEnumerator() {
                 (receiver as! ChatReceiver).addMessages(myResponse.messages)
             }
-            self.chatHistory.appendContentsOf(myResponse.messages)
+            self.chatHistory.append(contentsOf: myResponse.messages)
             
             if self.chatHistory.count > ChatPollService.MAX_MESSAGES {
                 self.chatHistory.removeFirst(self.chatHistory.count - ChatPollService.MAX_MESSAGES)
@@ -111,7 +111,7 @@ class ChatPollService: APIAccessor, LoginReceiver {
         self.schedulePollNow()
     }
     
-    override func onError(message: BaseResponse) {
+    override func onError(_ message: BaseResponse) {
         super.onError(message)
         
         self.shortPollNext = true
@@ -121,9 +121,8 @@ class ChatPollService: APIAccessor, LoginReceiver {
             self.errorReceiver?.setPollError("Error fetching messages: \(message.message!) (\(message.statusCode))")
         }
         
-        dispatch_after(
-            dispatch_time(DISPATCH_TIME_NOW, 1 * Int64(NSEC_PER_SEC)
-        ), dispatch_get_global_queue(QOS_CLASS_UTILITY, 0)) {
+        DispatchQueue.global(qos: DispatchQoS.QoSClass.utility).asyncAfter(
+            deadline: DispatchTime.now() + Double(1 * Int64(NSEC_PER_SEC)) / Double(NSEC_PER_SEC)) {
             self.schedulePollNow()
         }
     }
@@ -140,13 +139,13 @@ class ChatPollService: APIAccessor, LoginReceiver {
         self.request("/message", method: "GET", parameters: ["since": String(self.maxID)], waitOnLogin: true, loginOptional: true)
     }
     
-    internal func addReceiver(receiver: ChatReceiver, sendHistory: Bool, isLate: Bool=false) {
+    internal func addReceiver(_ receiver: ChatReceiver, sendHistory: Bool, isLate: Bool=false) {
         self.chatHistoryLock.lock()
         
         if isLate {
-            self.lateChatReceivers.addObject(receiver)
+            self.lateChatReceivers.add(receiver)
         } else {
-            self.chatReceivers.addObject(receiver)
+            self.chatReceivers.add(receiver)
         }
             
         if sendHistory && self.chatHistory.count > 0 {
@@ -158,15 +157,15 @@ class ChatPollService: APIAccessor, LoginReceiver {
         }
     }
     
-    internal func removeReceiver(receiver: ChatReceiver) {
+    internal func removeReceiver(_ receiver: ChatReceiver) {
         self.chatHistoryLock.lock()
-        self.chatReceivers.removeObject(receiver)
-        self.lateChatReceivers.removeObject(receiver)
+        self.chatReceivers.remove(receiver)
+        self.lateChatReceivers.remove(receiver)
         self.chatHistoryLock.unlock()
     }
     
     func loginStateChanged() {
-        dispatch_async(dispatch_get_global_queue(QOS_CLASS_USER_INITIATED, 0)) {
+        DispatchQueue.global(qos: DispatchQoS.QoSClass.userInitiated).async {
             self.start()
         }
     }

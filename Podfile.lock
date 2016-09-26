@@ -1,42 +1,42 @@
 PODS:
-  - Crashlytics (3.7.0):
+  - Crashlytics (3.8.2):
     - Fabric (~> 1.6.3)
   - DTCoreText (1.6.17):
     - DTFoundation/Core (~> 1.7.5)
     - DTFoundation/DTAnimatedGIF (~> 1.7.5)
     - DTFoundation/DTHTMLParser (~> 1.7.5)
     - DTFoundation/UIKit (~> 1.7.5)
-  - DTFoundation/Core (1.7.10)
-  - DTFoundation/DTAnimatedGIF (1.7.10)
-  - DTFoundation/DTHTMLParser (1.7.10):
+  - DTFoundation/Core (1.7.11)
+  - DTFoundation/DTAnimatedGIF (1.7.11)
+  - DTFoundation/DTHTMLParser (1.7.11):
     - DTFoundation/Core
-  - DTFoundation/UIKit (1.7.10):
+  - DTFoundation/UIKit (1.7.11):
     - DTFoundation/Core
-  - Fabric (1.6.7)
-  - JLToast (1.3.5)
-  - JSONJoy-Swift (2.0.0)
-  - KeychainAccess (2.3.4)
-  - SwiftHTTP (1.0.4)
+  - Fabric (1.6.8)
+  - JSONJoy-Swift (2.0.1)
+  - KeychainAccess (3.0.0)
+  - SwiftHTTP (2.0.0)
+  - Toaster (2.0.0)
 
 DEPENDENCIES:
   - Crashlytics
   - DTCoreText
   - Fabric
-  - JLToast (~> 1.3)
-  - JSONJoy-Swift (~> 2.0.0)
+  - JSONJoy-Swift (~> 2.0.1)
   - KeychainAccess
-  - SwiftHTTP (~> 1.0.4)
+  - SwiftHTTP (~> 2.0.0)
+  - Toaster (~> 2.0)
 
 SPEC CHECKSUMS:
-  Crashlytics: c3a2333dea9e2733d2777f730910321fc9e25c0d
+  Crashlytics: 27acca95a01b042a8294291dd6dff27f8f6af6d7
   DTCoreText: 3ea8bba23dd2141ba18adb227a7dd33a822df1c4
-  DTFoundation: 3b6b1b817d2a7fb02e7eaf2596c922a68145bd43
-  Fabric: caf7580c725e64db144f610ac65cd60956911dc7
-  JLToast: 08024c173a36e4d747607593d59cc17f3c3b09f1
-  JSONJoy-Swift: 9dc31dfb9e551c3ae7781513a86e369598102653
-  KeychainAccess: 3a21b6944b4f2a22653f091d770cf10374961a94
-  SwiftHTTP: 7e084af3bf628b17589c7b61a9df8750947a9813
+  DTFoundation: 0ef29c70a9814e15518694862bd739347abe2a50
+  Fabric: 5755268d0171435ab167e3d0878a28a777deaf10
+  JSONJoy-Swift: 9e3d2c20cadbfdd8cd56f1f4d5733d80ce2ffa09
+  KeychainAccess: 412bf2650d9aebfc8135a58103b90ec38caad7f8
+  SwiftHTTP: 55a6f10e9952819ff728a3d9d1fa52ba3d266dba
+  Toaster: 25101e968655aa991fa72ad888029e8d515c6237
 
-PODFILE CHECKSUM: 0fe33e2d7a7a31708d34d78e759404415d7bb7be
+PODFILE CHECKSUM: b84af91eae63ae6b28149ca9685550e6dded9556
 
-COCOAPODS: 1.0.0
+COCOAPODS: 1.0.1

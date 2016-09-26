@@ -19,8 +19,8 @@ class UIChatBarView: UIView {
         }
         
         upperBorder = CALayer()
-        upperBorder!.backgroundColor = UIColor.grayColor().CGColor
-        upperBorder!.frame = CGRectMake(0, 0, self.frame.width, 1.0)
+        upperBorder!.backgroundColor = UIColor.gray.cgColor
+        upperBorder!.frame = CGRect(x: 0, y: 0, width: self.frame.width, height: 1.0)
         self.layer.addSublayer(upperBorder!)
     }
 }

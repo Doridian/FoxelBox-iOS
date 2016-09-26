@@ -9,7 +9,7 @@
 import SwiftHTTP
 import JSONJoy
 import UIKit
-import JLToast
+import Toaster
 
 class APIAccessor {
     static let API_URL = "https://api.foxelbox.com/v2"
@@ -20,22 +20,22 @@ class APIAccessor {
     
     static let loginUtil = LoginAccessor()
     
-    private static var requestsInProgress = 0
-    private static var progressIndicatorShowing = false
+    fileprivate static var requestsInProgress = 0
+    fileprivate static var progressIndicatorShowing = false
     
-    static func incrementRequestsInProgress(val: Int) {
-        dispatch_async(dispatch_get_main_queue()) {
+    static func incrementRequestsInProgress(_ val: Int) {
+        DispatchQueue.main.async {
             APIAccessor.requestsInProgress += val
             let progressIndicatorShouldShow = APIAccessor.requestsInProgress > 0
             if progressIndicatorShouldShow != APIAccessor.progressIndicatorShowing {
-                UIApplication.sharedApplication().networkActivityIndicatorVisible = progressIndicatorShouldShow
+                UIApplication.shared.isNetworkActivityIndicatorVisible = progressIndicatorShouldShow
                 APIAccessor.progressIndicatorShowing = progressIndicatorShouldShow
             }
         }
     }
     
-    private var lastRequest: HTTP?
-    func cancel(wait: Bool=false) -> Bool {
+    fileprivate var lastRequest: HTTP?
+    func cancel(_ wait: Bool=false) -> Bool {
         guard self.lastRequest != nil else {
             return false
         }
@@ -58,11 +58,11 @@ class APIAccessor {
         return true
     }
     
-    func onSuccess(response: BaseResponse) throws {
+    func onSuccess(_ response: BaseResponse) throws {
         // Implement in children!
     }
     
-    func onError(response: BaseResponse) {
+    func onError(_ response: BaseResponse) {
         if (response.statusCode == 401) {
             APIAccessor.loginUtil.logout()
             APIAccessor.loginUtil.askLogin()
@@ -72,21 +72,21 @@ class APIAccessor {
         let textMessage = "HTTP error: \(response.message!) (\(response.statusCode))"
         print(textMessage)
         if self.makeToastForErrors() {
-            JLToast.makeText(textMessage, duration: 1).show()
+            Toast(text: textMessage, duration: 1).show()
         }
     }
     
-    func request(url: String, method: String, parameters: [String: String]?=nil, noSession: Bool=false, waitOnLogin: Bool=false, loginOptional: Bool=false, callback: ((BaseResponse) -> (Void))?=nil) {
-        dispatch_async(dispatch_get_global_queue(QOS_CLASS_UTILITY, 0)) {
+    func request(_ url: String, method: String, parameters: [String: String]?=nil, noSession: Bool=false, waitOnLogin: Bool=false, loginOptional: Bool=false, callback: ((BaseResponse) -> (Void))?=nil) {
+        DispatchQueue.global(qos: DispatchQoS.QoSClass.utility).async {
             self.doRequest(url, method: method, parameters: parameters, noSession: noSession, waitOnLogin: waitOnLogin, loginOptional: loginOptional, callback: callback)
         }
     }
     
-    private func doRequest(url: String, method: String, parameters: [String: String]?=nil, noSession: Bool=false, waitOnLogin: Bool=true, loginOptional: Bool=false, callback: ((BaseResponse) -> (Void))?=nil) {
+    fileprivate func doRequest(_ url: String, method: String, parameters: [String: String]?=nil, noSession: Bool=false, waitOnLogin: Bool=true, loginOptional: Bool=false, callback: ((BaseResponse) -> (Void))?=nil) {
         do {
             let req = NSMutableURLRequest(urlString: APIAccessor.API_URL + url)!
             
-            req.HTTPMethod = method
+            req.httpMethod = method
             
             if waitOnLogin {
                 APIAccessor.loginUtil.doLogin(succeedOnNoCredentials: loginOptional) { response in
@@ -121,7 +121,7 @@ class APIAccessor {
                 APIAccessor.incrementRequestsInProgress(1)
             }
             
-            let opt = HTTP(req)
+            let opt = HTTP(req as URLRequest)
             self.lastRequest = opt
             opt.start { response in
                 self.lastRequest = nil
@@ -138,7 +138,7 @@ class APIAccessor {
                     if response.error != nil {
                         jsonResponse = BaseResponse(message: response.error!.localizedDescription, statusCode: response.error!.code)
                     } else {
-                        jsonResponse = BaseResponse(message: String(error))
+                        jsonResponse = BaseResponse(message: String(describing: error))
                     }
                     
                     self.onError(jsonResponse)

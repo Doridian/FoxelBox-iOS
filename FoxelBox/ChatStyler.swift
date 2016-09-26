@@ -10,7 +10,7 @@ import Foundation
 import UIKit
 import DTCoreText
 
-class ChatStyler : NSObject, NSXMLParserDelegate {
+class ChatStyler : NSObject, XMLParserDelegate {
     static let colorReplacements = [
         "black": "#000000",
         "dark_blue": "#0000BE",
@@ -32,9 +32,9 @@ class ChatStyler : NSObject, NSXMLParserDelegate {
     
     var returnData = ""
     
-    private func fixTags(msg :String) throws -> String {
-        let xmlData = ("<span>" + msg + "</span>").dataUsingEncoding(NSUTF8StringEncoding)
-        let xmlParser = NSXMLParser(data: xmlData!)
+    fileprivate func fixTags(_ msg :String) throws -> String {
+        let xmlData = ("<span>" + msg + "</span>").data(using: String.Encoding.utf8)
+        let xmlParser = XMLParser(data: xmlData!)
         xmlParser.delegate = self
         xmlParser.parse()
 
@@ -43,11 +43,11 @@ class ChatStyler : NSObject, NSXMLParserDelegate {
     
     var isSurroundedByA: [Bool] = [Bool]()
     
-    @objc func parser(parser: NSXMLParser, didStartElement elementName: String, namespaceURI: String?, qualifiedName qName: String?, attributes attributeDict: [String : String]) {
+    @objc func parser(_ parser: XMLParser, didStartElement elementName: String, namespaceURI: String?, qualifiedName qName: String?, attributes attributeDict: [String : String]) {
         
         if let onClick = attributeDict["onClick"] {
             returnData += "<a href=\"" + onClick
-                .stringByAddingPercentEncodingWithAllowedCharacters(.URLHostAllowedCharacterSet())! + "\">"
+                .addingPercentEncoding(withAllowedCharacters: .urlHostAllowed)! + "\">"
             isSurroundedByA.append(true)
         } else {
             isSurroundedByA.append(false)
@@ -58,43 +58,43 @@ class ChatStyler : NSObject, NSXMLParserDelegate {
         }
     }
     
-    @objc func parser(parser: NSXMLParser, didEndElement elementName: String, namespaceURI: String?, qualifiedName qName: String?) {
+    @objc func parser(_ parser: XMLParser, didEndElement elementName: String, namespaceURI: String?, qualifiedName qName: String?) {
         if elementName == "color" {
             returnData += "</font>"
         }
         
-        if isSurroundedByA.popLast()!.boolValue {
+        if isSurroundedByA.popLast()! {
             returnData += "</a>"
         }
     }
     
-    @objc func parser(parser: NSXMLParser, foundCharacters string: String) {
+    @objc func parser(_ parser: XMLParser, foundCharacters string: String) {
         returnData += string
-            .stringByReplacingOccurrencesOfString("&", withString: "&amp;")
-            .stringByReplacingOccurrencesOfString("<", withString: "&lt;")
-            .stringByReplacingOccurrencesOfString(">", withString: "&gt;")
+            .replacingOccurrences(of: "&", with: "&amp;")
+            .replacingOccurrences(of: "<", with: "&lt;")
+            .replacingOccurrences(of: ">", with: "&gt;")
     }
     
     static let nsHTMLParseOptions: [String: AnyObject] = [
-        NSDocumentTypeDocumentAttribute: NSHTMLTextDocumentType,
-        NSCharacterEncodingDocumentAttribute: NSUTF8StringEncoding,
-        DTDefaultFontName: "Helvetica",
-        DTDefaultFontSize: 14,
-        DTDefaultTextColor: "white",
-        DTDefaultLinkDecoration: false,
-        DTDefaultLinkColor: "white",
-        DTDefaultLinkHighlightColor: "white",
-        DTUseiOS6Attributes: true
+        NSDocumentTypeDocumentAttribute: NSHTMLTextDocumentType as AnyObject,
+        NSCharacterEncodingDocumentAttribute: String.Encoding.utf8 as AnyObject,
+        DTDefaultFontName: "Helvetica" as AnyObject,
+        DTDefaultFontSize: 14 as AnyObject,
+        DTDefaultTextColor: "white" as AnyObject,
+        DTDefaultLinkDecoration: false as AnyObject,
+        DTDefaultLinkColor: "white" as AnyObject,
+        DTDefaultLinkHighlightColor: "white" as AnyObject,
+        DTUseiOS6Attributes: true as AnyObject
     ]
     
-    static func formatMessage(msg: String) -> NSAttributedString {
+    static func formatMessage(_ msg: String) -> NSAttributedString {
         do {
             let instance = ChatStyler()
-            let data: NSData = try instance.fixTags(msg).dataUsingEncoding(NSUTF8StringEncoding)!
-            return DTHTMLAttributedStringBuilder(HTML: data, options: nsHTMLParseOptions, documentAttributes: nil).generatedAttributedString()
+            let data: Data = try instance.fixTags(msg).data(using: String.Encoding.utf8)!
+            return DTHTMLAttributedStringBuilder(html: data, options: nsHTMLParseOptions, documentAttributes: nil).generatedAttributedString()
         } catch let error {
             print("Error: \(error)")
-            let dataNo = msg.dataUsingEncoding(NSUTF8StringEncoding)
+            let dataNo = msg.data(using: String.Encoding.utf8)
             return try! NSAttributedString(data: dataNo!, options: [:], documentAttributes: nil)
         }
     }

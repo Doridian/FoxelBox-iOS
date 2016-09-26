@@ -23,20 +23,20 @@ class ChatSender: APIAccessor, ChatReceiver {
         AppDelegate.chatPoller.removeReceiver(self)
     }
     
-    private func messageDone(context: JSONUUID) {
-        guard self.pendingMessages.containsObject(context) else {
+    fileprivate func messageDone(_ context: JSONUUID) {
+        guard self.pendingMessages.contains(context) else {
             return
         }
         
         self.pendingMessagesLock.lock()
         
         APIAccessor.incrementRequestsInProgress(-1)
-        self.pendingMessages.removeObject(context)
+        self.pendingMessages.remove(context)
         
         self.pendingMessagesLock.unlock()
     }
     
-    func addMessages(messages: [ChatMessageOut]) {
+    func addMessages(_ messages: [ChatMessageOut]) {
         for message in messages {
             guard message.finalizeContext else {
                 continue
@@ -55,27 +55,27 @@ class ChatSender: APIAccessor, ChatReceiver {
         pendingMessagesLock.unlock()
     }
     
-    override func onSuccess(response: BaseResponse) throws {
+    override func onSuccess(_ response: BaseResponse) throws {
         let reply = try SentMessageReply(response.result!)
         
         self.pendingMessagesLock.lock()
         
-        self.pendingMessages.addObject(reply.context)
+        self.pendingMessages.add(reply.context)
         APIAccessor.incrementRequestsInProgress(1)
         
-        let delayTime = dispatch_time(DISPATCH_TIME_NOW, Int64(10 * Double(NSEC_PER_SEC)))
-        dispatch_after(delayTime, dispatch_get_global_queue(QOS_CLASS_USER_INITIATED, 0)) {
+        let delayTime = DispatchTime.now() + Double(Int64(10 * Double(NSEC_PER_SEC))) / Double(NSEC_PER_SEC)
+        DispatchQueue.global(qos: DispatchQoS.QoSClass.userInitiated).asyncAfter(deadline: delayTime) {
             self.messageDone(reply.context)
         }
         
         self.pendingMessagesLock.unlock()
     }
     
-    override func onError(response: BaseResponse) {
+    override func onError(_ response: BaseResponse) {
         super.onError(response)
     }
     
-    internal func sendMessage(message: String, callback: ((BaseResponse) -> (Void))?=nil) {
+    internal func sendMessage(_ message: String, callback: ((BaseResponse) -> (Void))?=nil) {
         request("/message", method: "POST", parameters: ["message": message], callback: callback)
     }
 }

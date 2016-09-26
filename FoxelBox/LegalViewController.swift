@@ -15,14 +15,14 @@ class LegalViewController: UIViewController {
     override func loadView() {
         super.loadView()
         
-        let resPath = NSURL(fileURLWithPath: NSBundle.mainBundle().resourcePath!)
-            .URLByAppendingPathComponent("Legal.html")
+        let resPath = URL(fileURLWithPath: Bundle.main.resourcePath!)
+            .appendingPathComponent("Legal.html")
 
-        let str = NSData(contentsOfURL: resPath)
+        let str = try? Data(contentsOf: resPath)
 
-        self.legalTextView.attributedText = DTHTMLAttributedStringBuilder(HTML: str, options: [
+        self.legalTextView.attributedText = DTHTMLAttributedStringBuilder(html: str, options: [
             NSDocumentTypeDocumentAttribute: NSHTMLTextDocumentType,
-            NSCharacterEncodingDocumentAttribute: NSUTF8StringEncoding,
+            NSCharacterEncodingDocumentAttribute: String.Encoding.utf8,
             DTDefaultFontName: "Helvetica",
             DTDefaultFontSize: 10,
             DTDefaultTextColor: "white",

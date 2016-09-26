@@ -10,7 +10,7 @@ import UIKit
 import WebKit
 
 class MapViewController: UIViewController, WKNavigationDelegate {
-    private weak var webView: WKWebView?
+    fileprivate weak var webView: WKWebView?
     
     var inNavigation :UInt8 = 0
     var hasLoaded = false
@@ -29,28 +29,28 @@ class MapViewController: UIViewController, WKNavigationDelegate {
         view.addConstraints([
             NSLayoutConstraint(
                 item:webView,
-                attribute:NSLayoutAttribute.Top,
-                relatedBy:NSLayoutRelation.Equal,
+                attribute:NSLayoutAttribute.top,
+                relatedBy:NSLayoutRelation.equal,
                 toItem:topLayoutGuide,
-                attribute:NSLayoutAttribute.Bottom,
+                attribute:NSLayoutAttribute.bottom,
                 multiplier:1,
                 constant:0
             ),
             NSLayoutConstraint(
                 item:webView,
-                attribute:NSLayoutAttribute.Bottom,
-                relatedBy:NSLayoutRelation.Equal,
+                attribute:NSLayoutAttribute.bottom,
+                relatedBy:NSLayoutRelation.equal,
                 toItem:bottomLayoutGuide,
-                attribute:NSLayoutAttribute.Top,
+                attribute:NSLayoutAttribute.top,
                 multiplier:1,
                 constant:0
             ),
             NSLayoutConstraint(
                 item:webView,
-                attribute:NSLayoutAttribute.Width,
-                relatedBy:NSLayoutRelation.Equal,
+                attribute:NSLayoutAttribute.width,
+                relatedBy:NSLayoutRelation.equal,
                 toItem:view,
-                attribute:NSLayoutAttribute.Width,
+                attribute:NSLayoutAttribute.width,
                 multiplier:1,
                 constant:0
             )
@@ -61,7 +61,7 @@ class MapViewController: UIViewController, WKNavigationDelegate {
         self.endLoad()
     }
     
-    override func viewDidAppear(animated: Bool) {
+    override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         
         if !self.hasLoaded {
@@ -69,20 +69,20 @@ class MapViewController: UIViewController, WKNavigationDelegate {
         }
     }
     
-    override func viewDidDisappear(animated: Bool) {
+    override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
         
         self.endLoad()
     }
     
-    @IBAction func refresh(sender: AnyObject) {
+    @IBAction func refresh(_ sender: AnyObject) {
         self.reload()
     }
     
     func reload() {
-        let url = NSURL(string: "https://api.foxelbox.com/map/main/")
-        let req = NSURLRequest(URL: url!)
-        webView?.loadRequest(req)
+        let url = URL(string: "https://api.foxelbox.com/map/main/")
+        let req = URLRequest(url: url!)
+        webView?.load(req)
     }
     
     func beginLoad() {
@@ -97,15 +97,15 @@ class MapViewController: UIViewController, WKNavigationDelegate {
         }
     }
     
-    override func preferredStatusBarStyle() -> UIStatusBarStyle {
-        return UIStatusBarStyle.LightContent
+    override var preferredStatusBarStyle : UIStatusBarStyle {
+        return UIStatusBarStyle.lightContent
     }
     
-    func webView(webView: WKWebView, didStartProvisionalNavigation navigation: WKNavigation!) {
+    func webView(_ webView: WKWebView, didStartProvisionalNavigation navigation: WKNavigation!) {
         self.beginLoad()
     }
     
-    func webView(webView: WKWebView, didFinishNavigation navigation: WKNavigation!) {
+    func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
         self.endLoad()
         self.hasLoaded = true
     }

@@ -9,9 +9,9 @@
 import UIKit
 
 class ChatTableView: UITableView, UITableViewDelegate, UITableViewDataSource, ChatReceiver {
-    private static let MAX_MESSAGES = 100
+    fileprivate static let MAX_MESSAGES = 100
     
-    private class CachingMessage {
+    fileprivate class CachingMessage {
         let message :ChatMessageOut
         var formatted :NSAttributedString?
         
@@ -30,15 +30,15 @@ class ChatTableView: UITableView, UITableViewDelegate, UITableViewDataSource, Ch
         }
     }
     
-    private var messagesArray: [CachingMessage] = [CachingMessage]()
-    private var lastBadgeValue :String?
+    fileprivate var messagesArray: [CachingMessage] = [CachingMessage]()
+    fileprivate var lastBadgeValue :String?
     
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
         self.delegate = self
         self.dataSource = self
         
-        self.transform = CGAffineTransformMakeScale(1, -1)
+        self.transform = CGAffineTransform(scaleX: 1, y: -1)
         
         AppDelegate.chatPoller.addReceiver(self, sendHistory: true)
     }
@@ -47,16 +47,16 @@ class ChatTableView: UITableView, UITableViewDelegate, UITableViewDataSource, Ch
         AppDelegate.chatPoller.removeReceiver(self)
     }
     
-    private func messageForIndexPath(indexPath: NSIndexPath) -> CachingMessage {
-        return self.messagesArray[(self.messagesArray.count - 1) - indexPath.row]
+    fileprivate func messageForIndexPath(_ indexPath: IndexPath) -> CachingMessage {
+        return self.messagesArray[(self.messagesArray.count - 1) - (indexPath as NSIndexPath).row]
     }
     
-    func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return messagesArray.count
     }
     
-    func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCellWithIdentifier("MessageCell")! as UITableViewCell
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: "MessageCell")! as UITableViewCell
         
         let textWeNeed = self.messageForIndexPath(indexPath).format()
         let textLabel = cell.subviews[0].subviews[0] as! UITextView
@@ -65,18 +65,18 @@ class ChatTableView: UITableView, UITableViewDelegate, UITableViewDataSource, Ch
         }
         textLabel.attributedText = textWeNeed
         
-        guard textLabel.textContainerInset != UIEdgeInsetsZero else {
+        guard textLabel.textContainerInset != UIEdgeInsets.zero else {
             return cell
         }
         
         textLabel.linkTextAttributes = [:]
-        textLabel.textContainerInset = UIEdgeInsetsZero
+        textLabel.textContainerInset = UIEdgeInsets.zero
         
         let tapGestureRecognizer = UITapGestureRecognizer()
         textLabel.addGestureRecognizer(tapGestureRecognizer)
         tapGestureRecognizer.addTarget(self, action: #selector(textTapped))
         
-        cell.transform = CGAffineTransformMakeScale(1, -1)
+        cell.transform = CGAffineTransform(scaleX: 1, y: -1)
         
         return cell
     }
@@ -84,14 +84,14 @@ class ChatTableView: UITableView, UITableViewDelegate, UITableViewDataSource, Ch
     static let parseFunctionRegex = try! NSRegularExpression(pattern: "^(.+)\\('(.+)'\\)$",
                                                              options: [])
     
-    func textTapped(recognizer :UITapGestureRecognizer) {
+    func textTapped(_ recognizer :UITapGestureRecognizer) {
         let textView = recognizer.view as! UITextView
         
         let layoutManager = textView.layoutManager
-        let location = recognizer.locationInView(textView)
+        let location = recognizer.location(in: textView)
         // We do not need to subtract insets as those are always 0!
         
-        let charIndex = layoutManager.characterIndexForPoint(location, inTextContainer: textView.textContainer, fractionOfDistanceBetweenInsertionPoints: nil)
+        let charIndex = layoutManager.characterIndex(for: location, in: textView.textContainer, fractionOfDistanceBetweenInsertionPoints: nil)
         
         guard charIndex < textView.textStorage.length else {
             return
@@ -99,20 +99,20 @@ class ChatTableView: UITableView, UITableViewDelegate, UITableViewDataSource, Ch
         
         var range = NSRange()
         
-        guard let val = textView.textStorage.attribute(NSLinkAttributeName, atIndex: charIndex, effectiveRange: &range) else {
+        guard let val = textView.textStorage.attribute(NSLinkAttributeName, at: charIndex, effectiveRange: &range) else {
             return
         }
-        let urlVal = val as! NSURL
+        let urlVal = val as! URL
         
         let urlString = urlVal.absoluteString
         
-        guard let result = ChatTableView.parseFunctionRegex.firstMatchInString(urlString, options: [], range: NSRange(location: 0, length: urlString.characters.count)) else {
+        guard let result = ChatTableView.parseFunctionRegex.firstMatch(in: urlString, options: [], range: NSRange(location: 0, length: urlString.characters.count)) else {
             return
         }
         
-        let function = (urlString as NSString).substringWithRange(result.rangeAtIndex(1))
-        let argument = (urlString as NSString).substringWithRange(result.rangeAtIndex(2))
-                        .stringByRemovingPercentEncoding!
+        let function = (urlString as NSString).substring(with: result.rangeAt(1))
+        let argument = (urlString as NSString).substring(with: result.rangeAt(2))
+                        .removingPercentEncoding!
         
         let chatViewController = self.getChatViewController()
 
@@ -122,22 +122,22 @@ class ChatTableView: UITableView, UITableViewDelegate, UITableViewDataSource, Ch
         case "run_command":
             chatViewController.rawSendChatMessage(argument)
         case "open_url":
-            if let url = NSURL(string: argument) {
-                UIApplication.sharedApplication().openURL(url)
+            if let url = URL(string: argument) {
+                UIApplication.shared.openURL(url)
             }
         default:
             break
         }
     }
     
-    func tableView(tableView: UITableView, estimatedHeightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
+    func tableView(_ tableView: UITableView, estimatedHeightForRowAt indexPath: IndexPath) -> CGFloat {
         let text = self.messageForIndexPath(indexPath).format()
-        let rect = text.boundingRectWithSize(CGSize(width: tableView.bounds.width, height: 0), options:NSStringDrawingOptions.UsesLineFragmentOrigin, context: nil)
+        let rect = text.boundingRect(with: CGSize(width: tableView.bounds.width, height: 0), options:NSStringDrawingOptions.usesLineFragmentOrigin, context: nil)
         
         return rect.height
     }
     
-    func scrollViewDidScroll(scrollView: UIScrollView) {
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
         guard self.contentOffset.y <= 0 else {
             return
         }
@@ -149,10 +149,10 @@ class ChatTableView: UITableView, UITableViewDelegate, UITableViewDataSource, Ch
     }
     
     func getChatViewController() -> ChatViewController {
-        return (self.nextResponder()?.nextResponder() as! ChatViewController)
+        return (self.next?.next as! ChatViewController)
     }
     
-    func setBadgeValue(badge :String?) {
+    func setBadgeValue(_ badge :String?) {
         guard self.lastBadgeValue != badge else {
             return
         }
@@ -160,7 +160,7 @@ class ChatTableView: UITableView, UITableViewDelegate, UITableViewDataSource, Ch
         self.lastBadgeValue = badge
     }
     
-    func addMessages(messages: [ChatMessageOut]) {
+    func addMessages(_ messages: [ChatMessageOut]) {
         var myMessages = [ChatMessageOut]()
         
         for message in messages {
@@ -174,7 +174,7 @@ class ChatTableView: UITableView, UITableViewDelegate, UITableViewDataSource, Ch
             myMessages.removeFirst(myMessages.count - ChatTableView.MAX_MESSAGES)
         }
         
-        dispatch_async(dispatch_get_main_queue()) {
+        DispatchQueue.main.async {
             let messagesAdded = myMessages.count
             
             let messagesRemoved = self.messagesArray.count - ChatPollService.MAX_MESSAGES
@@ -190,15 +190,15 @@ class ChatTableView: UITableView, UITableViewDelegate, UITableViewDataSource, Ch
             self.beginUpdates()
             
             if messagesRemoved > 0 {
-                var removePaths: [NSIndexPath] = [NSIndexPath]()
+                var removePaths: [IndexPath] = [IndexPath]()
                 
                 let lastIndex = self.messagesArray.count
                 
                 for i in lastIndex...(lastIndex + messagesRemoved - 1) {
-                    removePaths.append(NSIndexPath(forRow: i, inSection: 0))
+                    removePaths.append(IndexPath(row: i, section: 0))
                 }
                 
-                self.deleteRowsAtIndexPaths(removePaths, withRowAnimation: UITableViewRowAnimation.Top)
+                self.deleteRows(at: removePaths, with: UITableViewRowAnimation.top)
             }
             
             for message in myMessages {
@@ -206,13 +206,13 @@ class ChatTableView: UITableView, UITableViewDelegate, UITableViewDataSource, Ch
             }
             
             if messagesAdded > 0 {
-                var insertPaths: [NSIndexPath] = [NSIndexPath]()
+                var insertPaths: [IndexPath] = [IndexPath]()
                 
                 for i in 0...(messagesAdded - 1) {
-                    insertPaths.append(NSIndexPath(forRow: i, inSection: 0))
+                    insertPaths.append(IndexPath(row: i, section: 0))
                 }
                 
-                self.insertRowsAtIndexPaths(insertPaths, withRowAnimation: UITableViewRowAnimation.Top)
+                self.insertRows(at: insertPaths, with: UITableViewRowAnimation.top)
             }
             
             self.endUpdates()
@@ -220,7 +220,7 @@ class ChatTableView: UITableView, UITableViewDelegate, UITableViewDataSource, Ch
     }
     
     func clearMessages() {
-        dispatch_async(dispatch_get_main_queue(), {
+        DispatchQueue.main.async(execute: {
             self.setBadgeValue(nil)
             self.messagesArray.removeAll()
             self.reloadData()

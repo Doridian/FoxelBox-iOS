@@ -80,7 +80,7 @@ struct MessageTarget: JSONJoy {
                 filters.append(try filter.getString())
             }
         } else {
-            throw JSONError.WrongType
+            throw JSONError.wrongType
         }
         self.filter = filters
     }
@@ -126,7 +126,7 @@ struct ChatMessageOut: JSONJoy {
         self.contents = decoder["contents"].string
         
         if self.type == "text" && self.contents == nil {
-            throw JSONError.WrongType
+            throw JSONError.wrongType
         }
     }
 }
@@ -144,7 +144,7 @@ struct MessageReply: JSONJoy {
                 messages.append(try ChatMessageOut(message))
             }
         } else {
-            throw JSONError.WrongType
+            throw JSONError.wrongType
         }
         self.messages = messages
     }

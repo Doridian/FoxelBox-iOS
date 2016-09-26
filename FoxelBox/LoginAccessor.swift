@@ -18,21 +18,20 @@ class LoginAccessor: APIAccessor {
     internal var sessionToken: String?
     var expiresAt: Int = 0
     
-    private var username :String?
-    private var password :String?
-    private var passwordChanged :Bool = false
+    fileprivate var username :String?
+    fileprivate var password :String?
+    fileprivate var passwordChanged :Bool = false
     
-    let loginDispatchGroup = dispatch_group_create()
+    let loginDispatchGroup = DispatchGroup()
     
     var refreshId = 0
     var lastActionWasRefresh = false
     
     let loginReceiversLock = NSLock()
-    var loginReceivers: NSHashTable = NSHashTable.weakObjectsHashTable()
+    var loginReceivers: NSHashTable<AnyObject> = NSHashTable.weakObjects()
     
-    let keychain = Keychain(server: "https://foxelbox.com", protocolType: .HTTPS)
+    let keychain = Keychain(server: "https://foxelbox.com", protocolType: .https)
         .synchronizable(true)
-        .accessibility(.WhenUnlocked)
     
     override init() {
         super.init()
@@ -44,15 +43,15 @@ class LoginAccessor: APIAccessor {
     }
     
     func isLoggedIn() -> Bool {
-        dispatch_group_wait(self.loginDispatchGroup, DISPATCH_TIME_FOREVER)
-        return self.sessionToken != nil && self.expiresAt > Int(NSDate().timeIntervalSince1970)
+        self.loginDispatchGroup.wait(timeout: DispatchTime.distantFuture)
+        return self.sessionToken != nil && self.expiresAt > Int(Date().timeIntervalSince1970)
     }
     
     func hasCredentials() -> Bool {
         return self.username != nil && self.password != nil
     }
     
-    override func onSuccess(response: BaseResponse) throws {
+    override func onSuccess(_ response: BaseResponse) throws {
         let myResponse = try LoginResponse(response.result!)
         
         self.refreshId += 1
@@ -61,13 +60,12 @@ class LoginAccessor: APIAccessor {
         self.sessionToken = myResponse.sessionId
         self.expiresAt = myResponse.expiresAt
         
-        dispatch_group_leave(loginDispatchGroup)
+        loginDispatchGroup.leave()
         
-        let expiresIn = self.expiresAt - Int(NSDate().timeIntervalSince1970)
+        let expiresIn = self.expiresAt - Int(Date().timeIntervalSince1970)
         
-        dispatch_after(
-            dispatch_time(DISPATCH_TIME_NOW, Int64(expiresIn - 60) * Int64(NSEC_PER_SEC)
-            ), dispatch_get_global_queue(QOS_CLASS_UTILITY, 0)) {
+        DispatchQueue.global(qos: DispatchQoS.QoSClass.utility).asyncAfter(
+            deadline: DispatchTime.now() + Double(Int64(expiresIn - 60) * Int64(NSEC_PER_SEC)) / Double(NSEC_PER_SEC)) {
                 if (self.refreshId == myRefreshId) {
                     self.refreshLogin()
                 }
@@ -78,20 +76,20 @@ class LoginAccessor: APIAccessor {
         return false
     }
     
-    override func onError(message: BaseResponse) {
+    override func onError(_ message: BaseResponse) {
         if message.statusCode == APIAccessor.STATUS_CANCELLED {
-            dispatch_group_leave(self.loginDispatchGroup)
+            self.loginDispatchGroup.leave()
             return
         }
         
         if self.lastActionWasRefresh && message.statusCode == 401 {
             self.sessionToken = nil
             self.doLogin(true)
-            dispatch_group_leave(self.loginDispatchGroup)
+            self.loginDispatchGroup.leave()
             return
         }
 
-        dispatch_group_leave(self.loginDispatchGroup)
+        self.loginDispatchGroup.leave()
         
         self.sessionToken = nil
         
@@ -105,21 +103,21 @@ class LoginAccessor: APIAccessor {
     }
     
     func loadCredentials() {
-        dispatch_group_enter(self.loginDispatchGroup)
-        dispatch_async(dispatch_get_global_queue(QOS_CLASS_USER_INITIATED, 0)) {
-            self.username = NSUserDefaults.standardUserDefaults().stringForKey("username")
+        self.loginDispatchGroup.enter()
+        DispatchQueue.global(qos: DispatchQoS.QoSClass.userInitiated).async {
+            self.username = UserDefaults.standard.string(forKey: "username")
             if self.username != nil {
                 self.password = self.keychain[self.username!]
             }
-            dispatch_group_leave(self.loginDispatchGroup)
+            self.loginDispatchGroup.leave()
         }
     }
     
     func saveCredentials() {
-        dispatch_group_enter(self.loginDispatchGroup)
-        dispatch_async(dispatch_get_global_queue(QOS_CLASS_USER_INITIATED, 0)) {
-            let oldUsername = NSUserDefaults.standardUserDefaults().stringForKey("username")
-            NSUserDefaults.standardUserDefaults().setObject(self.username, forKey: "username")
+        self.loginDispatchGroup.enter()
+        DispatchQueue.global(qos: DispatchQoS.QoSClass.userInitiated).async {
+            let oldUsername = UserDefaults.standard.string(forKey: "username")
+            UserDefaults.standard.set(self.username, forKey: "username")
             
             if oldUsername != nil && oldUsername != self.username {
                 self.keychain[oldUsername!] = nil
@@ -129,11 +127,11 @@ class LoginAccessor: APIAccessor {
                 self.keychain[self.username!] = self.password
             }
             
-            dispatch_group_leave(self.loginDispatchGroup)
+            self.loginDispatchGroup.leave()
         }
     }
     
-    private func loginStateChanged() {
+    fileprivate func loginStateChanged() {
         loginReceiversLock.lock()
         for receiver in self.loginReceivers.objectEnumerator() {
             (receiver as! LoginReceiver).loginStateChanged()
@@ -144,26 +142,26 @@ class LoginAccessor: APIAccessor {
     var loginDialogShowing :Bool = false
     
     func askLogout() {
-        dispatch_async(dispatch_get_main_queue()) {
+        DispatchQueue.main.async {
             guard !self.loginDialogShowing else {
                 return
             }
             
             self.loginDialogShowing = true
             
-            let alert = UIAlertController(title: "Log out?", message: "You will need to log in again to send chat", preferredStyle: .Alert)
-            alert.addAction(UIAlertAction(title: "Confirm", style: .Default) { action in
+            let alert = UIAlertController(title: "Log out?", message: "You will need to log in again to send chat", preferredStyle: .alert)
+            alert.addAction(UIAlertAction(title: "Confirm", style: .default) { action in
                 self.loginDialogShowing = false
                 self.logout()
             })
-            alert.addAction(UIAlertAction(title: "Cancel", style: .Cancel) { action in
+            alert.addAction(UIAlertAction(title: "Cancel", style: .cancel) { action in
                 self.loginDialogShowing = false
             })
-            UIApplication.sharedApplication().keyWindow?.rootViewController?.presentViewController(alert, animated: true, completion: nil)
+            UIApplication.shared.keyWindow?.rootViewController?.present(alert, animated: true, completion: nil)
         }
     }
     
-    private func tryLoginAskOnError(username: String?, password: String?) {
+    fileprivate func tryLoginAskOnError(_ username: String?, password: String?) {
         self.login(username, password: password) { response in
             if !response.success {
                 self.askLogin("Error: \(response.message!) (\(response.statusCode))")
@@ -171,7 +169,7 @@ class LoginAccessor: APIAccessor {
         }
     }
     
-    func askLogin(message: String?=nil) {
+    func askLogin(_ message: String?=nil) {
         self.sessionToken = nil
         
         self.loginDialogShowing = true
@@ -190,47 +188,47 @@ class LoginAccessor: APIAccessor {
         }
     }
     
-    func askLoginOwn(message: String?=nil) {
+    func askLoginOwn(_ message: String?=nil) {
         var showMessage = message
         if showMessage == nil {
             showMessage = "Please use the same credentials as you do on foxelbox.com"
         }
         
-        dispatch_async(dispatch_get_main_queue(), {
+        DispatchQueue.main.async(execute: {
             guard !self.loginDialogShowing else {
                 return
             }
             
             self.loginDialogShowing = true
             
-            let alert = UIAlertController(title: "Please log in", message: showMessage, preferredStyle: .Alert)
-            alert.addAction(UIAlertAction(title: "OK", style: .Default) { action in
-                dispatch_async(dispatch_get_global_queue(QOS_CLASS_USER_INITIATED, 0)) {
+            let alert = UIAlertController(title: "Please log in", message: showMessage, preferredStyle: .alert)
+            alert.addAction(UIAlertAction(title: "OK", style: .default) { action in
+                DispatchQueue.global(qos: DispatchQoS.QoSClass.userInitiated).async {
                     self.tryLoginAskOnError(alert.textFields![0].text, password: alert.textFields![1].text)
                     self.loginDialogShowing = false
                 }
             })
-            alert.addAction(UIAlertAction(title: "Cancel", style: .Cancel) { action in
-                dispatch_async(dispatch_get_global_queue(QOS_CLASS_USER_INITIATED, 0)) {
+            alert.addAction(UIAlertAction(title: "Cancel", style: .cancel) { action in
+                DispatchQueue.global(qos: DispatchQoS.QoSClass.userInitiated).async {
                     self.loginDialogShowing = false
                     self.logout(true, clearChat: self.username != nil)
                 }
             })
-            alert.addTextFieldWithConfigurationHandler({ textField in
+            alert.addTextField(configurationHandler: { textField in
                 textField.placeholder = "Username"
-                textField.secureTextEntry = false
+                textField.isSecureTextEntry = true
                 textField.text = self.username
             })
-            alert.addTextFieldWithConfigurationHandler({ textField in
+            alert.addTextField(configurationHandler: { textField in
                 textField.placeholder = "Password"
-                textField.secureTextEntry = true
+                textField.isSecureTextEntry = true
                 textField.text = self.password
             })
-            UIApplication.sharedApplication().keyWindow?.rootViewController?.presentViewController(alert, animated: true, completion: nil)
+            UIApplication.shared.keyWindow?.rootViewController?.present(alert, animated: true, completion: nil)
         })
     }
     
-    func login(username :String?, password :String?, callback: ((BaseResponse) -> (Void))?=nil) {
+    func login(_ username :String?, password :String?, callback: ((BaseResponse) -> (Void))?=nil) {
         if self.username != nil && self.username != username {
             AppDelegate.chatPoller.clear()
         }
@@ -264,7 +262,7 @@ class LoginAccessor: APIAccessor {
         return
     }
     
-    func logout(unsetUsername :Bool=false, clearChat :Bool=true) {
+    func logout(_ unsetUsername :Bool=false, clearChat :Bool=true) {
         if unsetUsername {
             self.username = nil
             Crashlytics.sharedInstance().setUserName(nil)
@@ -285,7 +283,7 @@ class LoginAccessor: APIAccessor {
         }
     }
     
-    func doLogin(ignoreLoggedIn: Bool=false, succeedOnNoCredentials: Bool=false, callback: ((BaseResponse) -> (Void))?=nil) {
+    func doLogin(_ ignoreLoggedIn: Bool=false, succeedOnNoCredentials: Bool=false, callback: ((BaseResponse) -> (Void))?=nil) {
         guard ignoreLoggedIn || !self.isLoggedIn() else {
             callback?(BaseResponse(message: "OK", statusCode: 200, success: true))
             return
@@ -300,7 +298,7 @@ class LoginAccessor: APIAccessor {
             return
         }
 
-        dispatch_group_enter(self.loginDispatchGroup)
+        self.loginDispatchGroup.enter()
         
         self.cancel(true)
         self.lastActionWasRefresh = false
@@ -321,13 +319,13 @@ class LoginAccessor: APIAccessor {
         }
     }
     
-    private func refreshLogin() {
+    fileprivate func refreshLogin() {
         if self.sessionToken == nil {
             self.doLogin()
             return
         }
 
-        dispatch_group_enter(self.loginDispatchGroup)
+        self.loginDispatchGroup.enter()
         
         self.cancel(true)
         self.lastActionWasRefresh = true
@@ -336,15 +334,15 @@ class LoginAccessor: APIAccessor {
         return
     }
     
-    internal func addReceiver(receiver: LoginReceiver) {
+    internal func addReceiver(_ receiver: LoginReceiver) {
         self.loginReceiversLock.lock()
-        self.loginReceivers.addObject(receiver)
+        self.loginReceivers.add(receiver)
         self.loginReceiversLock.unlock()
     }
     
-    internal func removeReceiver(receiver: LoginReceiver) {
+    internal func removeReceiver(_ receiver: LoginReceiver) {
         self.loginReceiversLock.lock()
-        self.loginReceivers.removeObject(receiver)
+        self.loginReceivers.remove(receiver)
         self.loginReceiversLock.unlock()
     }
 }

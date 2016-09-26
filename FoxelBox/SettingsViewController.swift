@@ -21,8 +21,8 @@ class SettingsViewController: UITableViewController, LoginReceiver {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        let version = NSBundle.mainBundle().infoDictionary?["CFBundleShortVersionString"] as! String
-        let build = NSBundle.mainBundle().infoDictionary?[kCFBundleVersionKey as String] as! String
+        let version = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as! String
+        let build = Bundle.main.infoDictionary?[kCFBundleVersionKey as String] as! String
         
         self.versionLabel.text = "Version: \(version) (\(build))"
         
@@ -34,22 +34,22 @@ class SettingsViewController: UITableViewController, LoginReceiver {
         APIAccessor.loginUtil.removeReceiver(self)
     }
     
-    override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-        let cell = tableView.cellForRowAtIndexPath(indexPath)
-        tableView.deselectRowAtIndexPath(indexPath, animated: true)
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let cell = tableView.cellForRow(at: indexPath)
+        tableView.deselectRow(at: indexPath, animated: true)
         
         if cell == websiteTableCell {
-            UIApplication.sharedApplication().openURL(NSURL(string: "https://foxelbox.com")!)
+            UIApplication.shared.openURL(URL(string: "https://foxelbox.com")!)
         } else if cell == logoutTableCell {
-            let spinner = UIActivityIndicatorView(activityIndicatorStyle: UIActivityIndicatorViewStyle.White);
-            spinner.frame = CGRectMake(0, 0, 24, 24);
+            let spinner = UIActivityIndicatorView(activityIndicatorStyle: UIActivityIndicatorViewStyle.white);
+            spinner.frame = CGRect(x: 0, y: 0, width: 24, height: 24);
             self.logoutTableCell.accessoryView = spinner
             
             spinner.startAnimating()
             
-            self.logoutTableCell.userInteractionEnabled = false
+            self.logoutTableCell.isUserInteractionEnabled = false
             
-            dispatch_async(dispatch_get_global_queue(QOS_CLASS_USER_INITIATED, 0)) {
+            DispatchQueue.global(qos: DispatchQoS.QoSClass.userInitiated).async {
                 if APIAccessor.loginUtil.hasCredentials() {
                     APIAccessor.loginUtil.askLogout()
                 } else {
@@ -57,26 +57,26 @@ class SettingsViewController: UITableViewController, LoginReceiver {
                 }
             }
         } else if cell == legalTableCell {
-            self.navigationController!.performSegueWithIdentifier("LegalSegue", sender: self)
+            self.navigationController!.performSegue(withIdentifier: "LegalSegue", sender: self)
         }
     }
     
     func loginStateChanged() {
-        dispatch_async(dispatch_get_main_queue()) {
+        DispatchQueue.main.async {
             let isLoggedIn = APIAccessor.loginUtil.hasCredentials()
             
             self.logoutTableCell.accessoryView = nil
-            self.logoutTableCell.userInteractionEnabled = true
+            self.logoutTableCell.isUserInteractionEnabled = true
             
             if isLoggedIn {
-                self.logoutLabel.textColor = UIColor.redColor()
+                self.logoutLabel.textColor = UIColor.red
                 self.logoutLabel.text = "Log out"
-                self.usernameLabel.textColor = UIColor.whiteColor()
+                self.usernameLabel.textColor = UIColor.white
                 self.usernameLabel.text = "Username: \(APIAccessor.loginUtil.getUsername()!)"
             } else {
-                self.logoutLabel.textColor = UIColor.whiteColor()
+                self.logoutLabel.textColor = UIColor.white
                 self.logoutLabel.text = "Log in"
-                self.usernameLabel.textColor = UIColor.grayColor()
+                self.usernameLabel.textColor = UIColor.gray
                 self.usernameLabel.text = "Not logged in"
             }
         }

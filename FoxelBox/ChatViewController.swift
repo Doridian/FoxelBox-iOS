@@ -30,27 +30,27 @@ class ChatViewController: UIViewController, UITextFieldDelegate, ChatErrorReceiv
         
         AppDelegate.chatPoller.errorReceiver = self
         
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(ChatViewController.keyboardWillChangeFrame(_:)), name:UIKeyboardWillChangeFrameNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(ChatViewController.keyboardWillChangeFrame(_:)), name:NSNotification.Name.UIKeyboardWillChangeFrame, object: nil)
 
         self.CHAT_BAR_BASE_HEIGHT = self.chatBarHeightConstraint.constant
         self.CHAT_TEXT_BASE_COLOR = self.chatTextField.textColor
-        self.CHAT_TEXT_DISABLED_COLOR = UIColor.darkGrayColor()
+        self.CHAT_TEXT_DISABLED_COLOR = UIColor.darkGray
         
-        self.chatSendButton.setTitleColor(UIColor.darkGrayColor(), forState: UIControlState.Disabled)
+        self.chatSendButton.setTitleColor(UIColor.darkGray, for: UIControlState.disabled)
         
         self.chatMessageTableView.rowHeight = UITableViewAutomaticDimension
         self.chatMessageTableView.estimatedRowHeight = 20
         
         self.chatTextField.delegate = self
         
-        self.chatTextField.attributedPlaceholder = NSAttributedString(string: self.chatTextField.placeholder!, attributes: [NSForegroundColorAttributeName:UIColor.lightGrayColor()])
+        self.chatTextField.attributedPlaceholder = NSAttributedString(string: self.chatTextField.placeholder!, attributes: [NSForegroundColorAttributeName:UIColor.lightGray])
 
         APIAccessor.loginUtil.addReceiver(self)
         self.loginStateChanged()
     }
     
     deinit {
-        NSNotificationCenter.defaultCenter().removeObserver(self)
+        NotificationCenter.default.removeObserver(self)
         
         APIAccessor.loginUtil.removeReceiver(self)
         
@@ -61,12 +61,12 @@ class ChatViewController: UIViewController, UITextFieldDelegate, ChatErrorReceiv
         }
     }
     
-    func textFieldShouldReturn(textField: UITextField) -> Bool {
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         self.sendChatMessage(textField)
         return true
     }
     
-    func setChatMessage(message: String) {
+    func setChatMessage(_ message: String) {
         guard self.canSendChat else {
             return
         }
@@ -75,7 +75,7 @@ class ChatViewController: UIViewController, UITextFieldDelegate, ChatErrorReceiv
         self.chatTextField.becomeFirstResponder()
     }
     
-    @IBAction func sendChatMessage(sender: AnyObject) {
+    @IBAction func sendChatMessage(_ sender: AnyObject) {
         let chatMessage = self.chatTextField.text
         guard chatMessage != nil && chatMessage != "" else {
             return
@@ -84,7 +84,7 @@ class ChatViewController: UIViewController, UITextFieldDelegate, ChatErrorReceiv
         self.rawSendChatMessage(chatMessage!)
     }
     
-    func rawSendChatMessage(chatMessage: String) {
+    func rawSendChatMessage(_ chatMessage: String) {
         guard self.canSendChat else {
             return
         }
@@ -94,7 +94,7 @@ class ChatViewController: UIViewController, UITextFieldDelegate, ChatErrorReceiv
         ChatSender.instance.sendMessage(chatMessage) { response in
             self.isSendingMessage = false
             self.loginStateChanged()
-            dispatch_async(dispatch_get_main_queue()) {
+            DispatchQueue.main.async {
                 if response.success {
                     self.chatTextField.text = ""
                 }
@@ -102,17 +102,17 @@ class ChatViewController: UIViewController, UITextFieldDelegate, ChatErrorReceiv
         }
     }
     
-    func setPollError(message :String?) {
-        dispatch_async(dispatch_get_main_queue()) {
+    func setPollError(_ message :String?) {
+        DispatchQueue.main.async {
             self.pollErrorLabel.text = message
             
-            UIView.animateWithDuration(0.5) {
-                self.pollErrorView.hidden = (message == nil)
-            }
+            UIView.animate(withDuration: 0.5, animations: {
+                self.pollErrorView.isHidden = (message == nil)
+            }) 
         }
     }
     
-    func textField(textField: UITextField, shouldChangeCharactersInRange range: NSRange, replacementString string: String) -> Bool {
+    func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
         if !self.canSendChat {
             return false
         }
@@ -129,13 +129,13 @@ class ChatViewController: UIViewController, UITextFieldDelegate, ChatErrorReceiv
     }
     
     func loginStateChanged() {
-        dispatch_async(dispatch_get_global_queue(QOS_CLASS_USER_INITIATED, 0)) {
+        DispatchQueue.global(qos: DispatchQoS.QoSClass.userInitiated).async {
             let enabled = (!self.isSendingMessage) && APIAccessor.loginUtil.hasCredentials()
             
             self.canSendChat = enabled
             
-            dispatch_async(dispatch_get_main_queue()) {
-                self.chatSendButton.enabled = enabled
+            DispatchQueue.main.async {
+                self.chatSendButton.isEnabled = enabled
                 
                 if enabled {
                     self.chatTextField.textColor = self.CHAT_TEXT_BASE_COLOR
@@ -158,12 +158,12 @@ class ChatViewController: UIViewController, UITextFieldDelegate, ChatErrorReceiv
         APIAccessor.loginUtil.askLogin("You need to be logged in to send chat messages")
     }
     
-    func keyboardWillChangeFrame(notification: NSNotification) {
-        let info = notification.userInfo!
+    func keyboardWillChangeFrame(_ notification: Notification) {
+        let info = (notification as NSNotification).userInfo!
         
-        let animationDuration = info[UIKeyboardAnimationDurationUserInfoKey]!.doubleValue
+        let animationDuration = (info[UIKeyboardAnimationDurationUserInfoKey]! as AnyObject).doubleValue
         
-        let keyboardFrameEnd: CGRect = self.view.convertRect((info[UIKeyboardFrameEndUserInfoKey] as! NSValue).CGRectValue(), fromView: nil)
+        let keyboardFrameEnd: CGRect = self.view.convert((info[UIKeyboardFrameEndUserInfoKey] as! NSValue).cgRectValue, from: nil)
         
         var offsetHeight = (self.view.bounds.size.height - keyboardFrameEnd.origin.y) + (self.chatBarView.frame.maxY - self.view.frame.maxY)
         if offsetHeight < 0 {
@@ -171,13 +171,13 @@ class ChatViewController: UIViewController, UITextFieldDelegate, ChatErrorReceiv
         }
         self.chatBarHeightConstraint.constant = self.CHAT_BAR_BASE_HEIGHT + offsetHeight
         
-        UIView.animateWithDuration(animationDuration) {
+        UIView.animate(withDuration: animationDuration!, animations: {
             self.view.layoutIfNeeded()
-        }
+        }) 
     }
     
-    override func preferredStatusBarStyle() -> UIStatusBarStyle {
-        return UIStatusBarStyle.LightContent
+    override var preferredStatusBarStyle : UIStatusBarStyle {
+        return UIStatusBarStyle.lightContent
     }
 }
 

@@ -18,7 +18,7 @@ class UIEventedTabBarController: UITabBarController, UITabBarControllerDelegate 
         self.lastViewController = self.selectedViewController
     }
     
-    func tabBarController(tabBarController: UITabBarController, didSelectViewController viewController: UIViewController) {
+    func tabBarController(_ tabBarController: UITabBarController, didSelect viewController: UIViewController) {
         if viewController == self.lastViewController {
             var ourViewController = viewController
             if viewController is UINavigationController {

@@ -17,40 +17,40 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     
     static let chatPoller = ChatPollService()
     
-    func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
+    func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
         Fabric.with([Crashlytics.self])
         
-        UITableViewCell.appearance().backgroundColor = UIColor.blackColor()
+        UITableViewCell.appearance().backgroundColor = UIColor.black
         
         let bgColorView = UIView()
-        bgColorView.backgroundColor = UIColor.purpleColor()
+        bgColorView.backgroundColor = UIColor.purple
         UITableViewCell.appearance().selectedBackgroundView = bgColorView
         
-        UITabBar.appearance().tintColor = UIColor.purpleColor()
-        UITextField.appearance().tintColor = UIColor.purpleColor()
-        UIBarButtonItem.appearance().tintColor = UIColor.purpleColor()
+        UITabBar.appearance().tintColor = UIColor.purple
+        UITextField.appearance().tintColor = UIColor.purple
+        UIBarButtonItem.appearance().tintColor = UIColor.purple
         
         AppDelegate.chatPoller.start()
         return true
     }
 
-    func applicationWillResignActive(application: UIApplication) {
+    func applicationWillResignActive(_ application: UIApplication) {
         
     }   
 
-    func applicationDidEnterBackground(application: UIApplication) {
+    func applicationDidEnterBackground(_ application: UIApplication) {
         AppDelegate.chatPoller.stop()
     }
 
-    func applicationWillEnterForeground(application: UIApplication) {
+    func applicationWillEnterForeground(_ application: UIApplication) {
         AppDelegate.chatPoller.start()
     }
 
-    func applicationDidBecomeActive(application: UIApplication) {
+    func applicationDidBecomeActive(_ application: UIApplication) {
         
     }
 
-    func applicationWillTerminate(application: UIApplication) {
+    func applicationWillTerminate(_ application: UIApplication) {
         
     }
 
